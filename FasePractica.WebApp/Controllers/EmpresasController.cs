@@ -54,7 +54,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmpresaId,Nombre,Ruc,Telefono,Direccion,Latitud,Longitud,Descripcion")] Empresa empresa)
+        public async Task<IActionResult> Create([Bind("EmpresaId,Nombre,Alias,TipoEmpresa,TipoPersona,Ruc,Telefono,Correo,SectorProductivo,Direccion,Latitud,Longitud,Descripcion,TutorId")] Empresa empresa)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmpresaId,Nombre,Ruc,Telefono,Direccion,Latitud,Longitud,Descripcion")] Empresa empresa)
+        public async Task<IActionResult> Edit(int id, [Bind("EmpresaId,Nombre,Alias,TipoEmpresa,TipoPersona,Ruc,Telefono,Correo,SectorProductivo,Direccion,Latitud,Longitud,Descripcion,TutorId")] Empresa empresa)
         {
             if (id != empresa.EmpresaId)
             {
