@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FasePractica.WebApp.Models.Nota>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EstudianteId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proyecto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calificacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aprueba)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstudianteId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Proyecto.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Calificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aprueba)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.NotaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.NotaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.NotaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
