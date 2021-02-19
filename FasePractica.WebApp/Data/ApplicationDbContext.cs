@@ -11,7 +11,6 @@ namespace FasePractica.WebApp.Data
         {
         }
         public DbSet<Contacto> Contactos { get; set; }
-        public DbSet<Convenio> Convenios { get; set; }
         public DbSet<Conversacion> Conversaciones { get; set; }
         public DbSet<Documento> Documentos { get; set; }
         public DbSet<Empresa> Empresas { get; set; }

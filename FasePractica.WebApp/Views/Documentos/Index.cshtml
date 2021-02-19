@@ -19,10 +19,22 @@
                 @Html.DisplayNameFor(model => model.FirmadoEl)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.FechaFinal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.AlmacenadoEn)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empresa)
             </th>
             <th></th>
         </tr>
@@ -37,10 +49,22 @@
                 @Html.DisplayFor(modelItem => item.FirmadoEl)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.FechaFinal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.AlmacenadoEn)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Alias)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DocumentoId">Edit</a> |

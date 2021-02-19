@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +20,8 @@ namespace FasePractica.WebApp.Controllers
         // GET: Documentos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Documentos.ToListAsync());
+            var applicationDbContext = _context.Documentos.Include(d => d.Empresa);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Documentos/Details/5
@@ -34,6 +33,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var documento = await _context.Documentos
+                .Include(d => d.Empresa)
                 .FirstOrDefaultAsync(m => m.DocumentoId == id);
             if (documento == null)
             {
@@ -46,6 +46,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Documentos/Create
         public IActionResult Create()
         {
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField");
             return View();
         }
 
@@ -54,7 +55,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DocumentoId,Codigo,FirmadoEl,AlmacenadoEn,Estado")] Documento documento)
+        public async Task<IActionResult> Create([Bind("DocumentoId,Codigo,FirmadoEl,FechaFinal,Descripcion,AlmacenadoEn,Estado,Tipo,EmpresaId")] Documento documento)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +63,7 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField", documento.EmpresaId);
             return View(documento);
         }
 
@@ -78,6 +80,7 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField", documento.EmpresaId);
             return View(documento);
         }
 
@@ -86,7 +89,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DocumentoId,Codigo,FirmadoEl,AlmacenadoEn,Estado")] Documento documento)
+        public async Task<IActionResult> Edit(int id, [Bind("DocumentoId,Codigo,FirmadoEl,FechaFinal,Descripcion,AlmacenadoEn,Estado,Tipo,EmpresaId")] Documento documento)
         {
             if (id != documento.DocumentoId)
             {
@@ -113,6 +116,7 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField", documento.EmpresaId);
             return View(documento);
         }
 
@@ -125,6 +129,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var documento = await _context.Documentos
+                .Include(d => d.Empresa)
                 .FirstOrDefaultAsync(m => m.DocumentoId == id);
             if (documento == null)
             {
