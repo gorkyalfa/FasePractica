@@ -1,0 +1,78 @@
+﻿@model FasePractica.WebApp.Models.Contacto
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Contacto</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ContactoId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ContactoId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombres)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombres)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Apellidos)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Apellidos)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cedula)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cedula)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TituloProfesional)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TituloProfesional)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CorreoInstitucional)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CorreoInstitucional)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CorreoPersonal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CorreoPersonal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Empresa)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Empresa.DataValueField)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CargoEmpresa)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CargoEmpresa)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ContactoId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

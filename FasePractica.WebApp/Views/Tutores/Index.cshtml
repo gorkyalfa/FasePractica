@@ -1,0 +1,83 @@
+﻿@model IEnumerable<FasePractica.WebApp.Models.Tutor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TutorId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cedula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TituloProfesional)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CorreoInstitucional)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CorreoPersonal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodigoIgnug)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TutorId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombres)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellidos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cedula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TituloProfesional)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorreoInstitucional)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorreoPersonal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoIgnug)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TutorId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TutorId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TutorId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
