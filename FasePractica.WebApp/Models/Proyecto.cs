@@ -42,6 +42,7 @@ namespace FasePractica.WebApp.Models
         public Contacto TutorEmpresarial { get; set; }
 
         public List<Nota> Notas { get; set; }
+
         [NotMapped]
         public string DataValueField { get { return $"{Semestre.DataValueField} {Nombre} {Empresa.DataValueField}"; } }
     }

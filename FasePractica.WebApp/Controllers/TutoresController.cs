@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FasePractica.WebApp.Data;
 using FasePractica.WebApp.Models;
@@ -19,8 +22,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Tutores
         public async Task<IActionResult> Index()
         {
-            var tutores = _context.Tutores;
-            return View(await tutores.ToListAsync());
+            return View(await _context.Tutores.ToListAsync());
         }
 
         // GET: Tutores/Details/5
@@ -32,7 +34,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var tutor = await _context.Tutores
-                .FirstOrDefaultAsync(m => m.TutorId == id);
+                .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (tutor == null)
             {
                 return NotFound();
@@ -52,7 +54,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TutorId,Apellidos,CodigoIgnug,Cedula,CorreoInstitucional,CorreoPersonal,Nombres,Telefono,TituloProfesional")] Tutor tutor)
+        public async Task<IActionResult> Create([Bind("TituloProfesional,CodigoIgnug,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Tutor tutor)
         {
             if (ModelState.IsValid)
             {
@@ -84,9 +86,9 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TutorId,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,CodigoIgnug,Nombres,Telefono,TituloProfesional")] Tutor tutor)
+        public async Task<IActionResult> Edit(int id, [Bind("TituloProfesional,CodigoIgnug,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Tutor tutor)
         {
-            if (id != tutor.TutorId)
+            if (id != tutor.PersonaId)
             {
                 return NotFound();
             }
@@ -100,7 +102,7 @@ namespace FasePractica.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TutorExists(tutor.TutorId))
+                    if (!TutorExists(tutor.PersonaId))
                     {
                         return NotFound();
                     }
@@ -123,7 +125,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var tutor = await _context.Tutores
-                .FirstOrDefaultAsync(m => m.TutorId == id);
+                .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (tutor == null)
             {
                 return NotFound();
@@ -145,7 +147,7 @@ namespace FasePractica.WebApp.Controllers
 
         private bool TutorExists(int id)
         {
-            return _context.Tutores.Any(e => e.TutorId == id);
+            return _context.Tutores.Any(e => e.PersonaId == id);
         }
     }
 }

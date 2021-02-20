@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,8 +22,8 @@ namespace FasePractica.WebApp.Controllers
         // GET: Contactos
         public async Task<IActionResult> Index()
         {
-            var contactos = _context.Contactos.Include(c => c.Empresa);
-            return View(await contactos.ToListAsync());
+            var applicationDbContext = _context.Contactos.Include(c => c.Empresa);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Contactos/Details/5
@@ -34,7 +36,7 @@ namespace FasePractica.WebApp.Controllers
 
             var contacto = await _context.Contactos
                 .Include(c => c.Empresa)
-                .FirstOrDefaultAsync(m => m.ContactoId == id);
+                .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (contacto == null)
             {
                 return NotFound();
@@ -55,7 +57,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContactoId,Apellidos,CargoEmpresa,Cedula,CorreoInstitucional,CorreoPersonal,EmpresaId,Nombres,Telefono,TituloProfesional")] Contacto contacto)
+        public async Task<IActionResult> Create([Bind("TituloProfesional,CargoEmpresa,EmpresaId,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Contacto contacto)
         {
             if (ModelState.IsValid)
             {
@@ -89,9 +91,9 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContactoId,Apellidos,CargoEmpresa,Cedula,CorreoInstitucional,CorreoPersonal,EmpresaId,Nombres,Telefono,TituloProfesional")] Contacto contacto)
+        public async Task<IActionResult> Edit(int id, [Bind("TituloProfesional,CargoEmpresa,EmpresaId,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Contacto contacto)
         {
-            if (id != contacto.ContactoId)
+            if (id != contacto.PersonaId)
             {
                 return NotFound();
             }
@@ -105,7 +107,7 @@ namespace FasePractica.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContactoExists(contacto.ContactoId))
+                    if (!ContactoExists(contacto.PersonaId))
                     {
                         return NotFound();
                     }
@@ -130,7 +132,7 @@ namespace FasePractica.WebApp.Controllers
 
             var contacto = await _context.Contactos
                 .Include(c => c.Empresa)
-                .FirstOrDefaultAsync(m => m.ContactoId == id);
+                .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (contacto == null)
             {
                 return NotFound();
@@ -152,7 +154,7 @@ namespace FasePractica.WebApp.Controllers
 
         private bool ContactoExists(int id)
         {
-            return _context.Contactos.Any(e => e.ContactoId == id);
+            return _context.Contactos.Any(e => e.PersonaId == id);
         }
     }
 }

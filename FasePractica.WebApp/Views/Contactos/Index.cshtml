@@ -13,7 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ContactoId)
+                @Html.DisplayNameFor(model => model.TituloProfesional)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CargoEmpresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empresa)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombres)
@@ -25,9 +31,6 @@
                 @Html.DisplayNameFor(model => model.Cedula)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TituloProfesional)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.CorreoInstitucional)
             </th>
             <th>
@@ -36,12 +39,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Telefono)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmpresaId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CargoEmpresa)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -49,7 +46,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ContactoId)
+                @Html.DisplayFor(modelItem => item.TituloProfesional)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CargoEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Alias)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nombres)
@@ -61,9 +64,6 @@
                 @Html.DisplayFor(modelItem => item.Cedula)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TituloProfesional)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.CorreoInstitucional)
             </td>
             <td>
@@ -73,15 +73,9 @@
                 @Html.DisplayFor(modelItem => item.Telefono)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Empresa.DataValueField)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CargoEmpresa)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ContactoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ContactoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ContactoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PersonaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PersonaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PersonaId">Delete</a>
             </td>
         </tr>
 }

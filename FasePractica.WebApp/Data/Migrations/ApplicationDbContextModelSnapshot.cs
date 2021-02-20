@@ -165,6 +165,8 @@ namespace FasePractica.WebApp.Data.Migrations
 
                     b.HasKey("EmpresaId");
 
+                    b.HasIndex("TutorId");
+
                     b.ToTable("Empresas");
                 });
 
@@ -187,11 +189,66 @@ namespace FasePractica.WebApp.Data.Migrations
                     b.Property<int>("ProyectoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProyectoId1")
+                        .HasColumnType("int");
+
                     b.HasKey("NotaId");
+
+                    b.HasIndex("EstudianteId");
 
                     b.HasIndex("ProyectoId");
 
+                    b.HasIndex("ProyectoId1");
+
                     b.ToTable("Notas");
+                });
+
+            modelBuilder.Entity("FasePractica.WebApp.Models.Persona", b =>
+                {
+                    b.Property<int>("PersonaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Cedula")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("CorreoInstitucional")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CorreoPersonal")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Nombres")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("TipoPersona")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PersonaId");
+
+                    b.ToTable("Personas");
+
+                    b.HasDiscriminator<string>("TipoPersona").HasValue("Persona");
                 });
 
             modelBuilder.Entity("FasePractica.WebApp.Models.Proyecto", b =>
@@ -230,9 +287,13 @@ namespace FasePractica.WebApp.Data.Migrations
 
                     b.HasKey("ProyectoId");
 
+                    b.HasIndex("ContactoId");
+
                     b.HasIndex("EmpresaId");
 
                     b.HasIndex("SemestreId");
+
+                    b.HasIndex("TutorId");
 
                     b.ToTable("Proyectos");
                 });
@@ -460,6 +521,68 @@ namespace FasePractica.WebApp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("FasePractica.WebApp.Models.Contacto", b =>
+                {
+                    b.HasBaseType("FasePractica.WebApp.Models.Persona");
+
+                    b.Property<string>("CargoEmpresa")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmpresaId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TituloProfesional")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasIndex("EmpresaId");
+
+                    b.HasIndex("EmpresaId1");
+
+                    b.ToTable("Personas");
+
+                    b.HasDiscriminator().HasValue("Contacto");
+                });
+
+            modelBuilder.Entity("FasePractica.WebApp.Models.Estudiante", b =>
+                {
+                    b.HasBaseType("FasePractica.WebApp.Models.Persona");
+
+                    b.Property<string>("CodigoIgnug")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.ToTable("Personas");
+
+                    b.HasDiscriminator().HasValue("Estudiante");
+                });
+
+            modelBuilder.Entity("FasePractica.WebApp.Models.Tutor", b =>
+                {
+                    b.HasBaseType("FasePractica.WebApp.Models.Persona");
+
+                    b.Property<string>("CodigoIgnug")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)")
+                        .HasColumnName("Tutor_CodigoIgnug");
+
+                    b.Property<string>("TituloProfesional")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Tutor_TituloProfesional");
+
+                    b.ToTable("Personas");
+
+                    b.HasDiscriminator().HasValue("Tutor");
+                });
+
             modelBuilder.Entity("FasePractica.WebApp.Models.Conversacion", b =>
                 {
                     b.HasOne("FasePractica.WebApp.Models.Empresa", "Empresa")
@@ -482,19 +605,48 @@ namespace FasePractica.WebApp.Data.Migrations
                     b.Navigation("Empresa");
                 });
 
-            modelBuilder.Entity("FasePractica.WebApp.Models.Nota", b =>
+            modelBuilder.Entity("FasePractica.WebApp.Models.Empresa", b =>
                 {
-                    b.HasOne("FasePractica.WebApp.Models.Proyecto", "Proyecto")
-                        .WithMany("Notas")
-                        .HasForeignKey("ProyectoId")
+                    b.HasOne("FasePractica.WebApp.Models.Tutor", "Tutor")
+                        .WithMany("Empresas")
+                        .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tutor");
+                });
+
+            modelBuilder.Entity("FasePractica.WebApp.Models.Nota", b =>
+                {
+                    b.HasOne("FasePractica.WebApp.Models.Estudiante", "Estudiante")
+                        .WithMany()
+                        .HasForeignKey("EstudianteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FasePractica.WebApp.Models.Proyecto", "Proyecto")
+                        .WithMany()
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FasePractica.WebApp.Models.Proyecto", null)
+                        .WithMany("Notas")
+                        .HasForeignKey("ProyectoId1");
+
+                    b.Navigation("Estudiante");
 
                     b.Navigation("Proyecto");
                 });
 
             modelBuilder.Entity("FasePractica.WebApp.Models.Proyecto", b =>
                 {
+                    b.HasOne("FasePractica.WebApp.Models.Contacto", "TutorEmpresarial")
+                        .WithMany()
+                        .HasForeignKey("ContactoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FasePractica.WebApp.Models.Empresa", "Empresa")
                         .WithMany()
                         .HasForeignKey("EmpresaId")
@@ -507,9 +659,19 @@ namespace FasePractica.WebApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FasePractica.WebApp.Models.Tutor", "TutorAcademico")
+                        .WithMany()
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Empresa");
 
                     b.Navigation("Semestre");
+
+                    b.Navigation("TutorAcademico");
+
+                    b.Navigation("TutorEmpresarial");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -563,8 +725,25 @@ namespace FasePractica.WebApp.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FasePractica.WebApp.Models.Contacto", b =>
+                {
+                    b.HasOne("FasePractica.WebApp.Models.Empresa", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FasePractica.WebApp.Models.Empresa", null)
+                        .WithMany("Contactos")
+                        .HasForeignKey("EmpresaId1");
+
+                    b.Navigation("Empresa");
+                });
+
             modelBuilder.Entity("FasePractica.WebApp.Models.Empresa", b =>
                 {
+                    b.Navigation("Contactos");
+
                     b.Navigation("Conversaciones");
 
                     b.Navigation("Documentos");
@@ -578,6 +757,11 @@ namespace FasePractica.WebApp.Data.Migrations
             modelBuilder.Entity("FasePractica.WebApp.Models.Semestre", b =>
                 {
                     b.Navigation("Proyectos");
+                });
+
+            modelBuilder.Entity("FasePractica.WebApp.Models.Tutor", b =>
+                {
+                    b.Navigation("Empresas");
                 });
 #pragma warning restore 612, 618
         }

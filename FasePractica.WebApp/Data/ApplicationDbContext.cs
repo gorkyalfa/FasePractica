@@ -10,6 +10,38 @@ namespace FasePractica.WebApp.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Persona>()
+                .HasDiscriminator<string>("TipoPersona")
+                .HasValue<Contacto>("Contacto")
+                .HasValue<Estudiante>("Estudiante")
+                .HasValue<Tutor>("Tutor");
+
+            builder.Entity<Contacto>()
+                .HasOne(e => e.Empresa)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Nota>()
+                .HasOne(e => e.Proyecto)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Proyecto>()
+                .HasOne(e => e.TutorAcademico)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Proyecto>()
+                .HasOne(e => e.TutorEmpresarial)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            base.OnModelCreating(builder);
+        }
+
         public DbSet<Contacto> Contactos { get; set; }
         public DbSet<Conversacion> Conversaciones { get; set; }
         public DbSet<Documento> Documentos { get; set; }

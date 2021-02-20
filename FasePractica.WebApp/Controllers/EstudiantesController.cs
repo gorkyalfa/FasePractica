@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FasePractica.WebApp.Data;
 using FasePractica.WebApp.Models;
@@ -19,8 +22,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Estudiantes
         public async Task<IActionResult> Index()
         {
-            var estudiantes = _context.Estudiantes;
-            return View(await estudiantes.ToListAsync());
+            return View(await _context.Estudiantes.ToListAsync());
         }
 
         // GET: Estudiantes/Details/5
@@ -32,7 +34,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var estudiante = await _context.Estudiantes
-                .FirstOrDefaultAsync(m => m.EstudianteId == id);
+                .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (estudiante == null)
             {
                 return NotFound();
@@ -52,7 +54,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EstudianteId,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,CodigoIgnug,Nombres,Telefono")] Estudiante estudiante)
+        public async Task<IActionResult> Create([Bind("CodigoIgnug,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Estudiante estudiante)
         {
             if (ModelState.IsValid)
             {
@@ -84,9 +86,9 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EstudianteId,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,CodigoIgnug,Nombres,Telefono")] Estudiante estudiante)
+        public async Task<IActionResult> Edit(int id, [Bind("CodigoIgnug,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Estudiante estudiante)
         {
-            if (id != estudiante.EstudianteId)
+            if (id != estudiante.PersonaId)
             {
                 return NotFound();
             }
@@ -100,7 +102,7 @@ namespace FasePractica.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EstudianteExists(estudiante.EstudianteId))
+                    if (!EstudianteExists(estudiante.PersonaId))
                     {
                         return NotFound();
                     }
@@ -123,7 +125,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var estudiante = await _context.Estudiantes
-                .FirstOrDefaultAsync(m => m.EstudianteId == id);
+                .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (estudiante == null)
             {
                 return NotFound();
@@ -145,7 +147,7 @@ namespace FasePractica.WebApp.Controllers
 
         private bool EstudianteExists(int id)
         {
-            return _context.Estudiantes.Any(e => e.EstudianteId == id);
+            return _context.Estudiantes.Any(e => e.PersonaId == id);
         }
     }
 }
