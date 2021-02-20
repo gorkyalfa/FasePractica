@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FasePractica.WebApp.Data;
 using FasePractica.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FasePractica.WebApp.Controllers
 {
+    [Authorize]
     public class ConversacionesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TenantDbContext _context;
 
-        public ConversacionesController(ApplicationDbContext context)
+        public ConversacionesController(TenantDbContext context)
         {
             _context = context;
         }

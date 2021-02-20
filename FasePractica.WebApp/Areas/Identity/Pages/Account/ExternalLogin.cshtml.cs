@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using FasePractica.WebApp.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -23,17 +24,20 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly ApplicationDbContext _dbContext;
 
         public ExternalLoginModel(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext dbContext)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _dbContext = dbContext;
         }
 
         [BindProperty]
@@ -119,6 +123,12 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
+            if (!EsCorreoPermitido(info)) 
+            {
+                ErrorMessage = "No está autorizada para utilizar esta aplicación.";
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
@@ -163,6 +173,20 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
             ProviderDisplayName = info.ProviderDisplayName;
             ReturnUrl = returnUrl;
             return Page();
+        }
+
+        private bool EsCorreoPermitido(ExternalLoginInfo info)
+        {
+            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+            {
+                var correo = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (string.IsNullOrEmpty(correo))
+                    return false;
+                
+                var usuario = _dbContext.Usuarios.FirstOrDefault(u => u.Correo == correo);
+                return usuario != null;
+            }
+            return false;
         }
     }
 }

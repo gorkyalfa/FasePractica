@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace FasePractica.WebApp.Data.Migrations
+namespace FasePractica.WebApp.Migrations
 {
-    public partial class ModeloInicial : Migration
+    public partial class ModelosNegocio : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

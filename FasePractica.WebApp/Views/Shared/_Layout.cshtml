@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,44 +20,47 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownAcademicoMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Académico
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownAcademicoMenuButton">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Proyectos" asp-action="Index">Proyectos</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Notas" asp-action="Index">Notas</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Semestres" asp-action="Index">Semestres</a>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownAcademicoMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Académico
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownAcademicoMenuButton">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Proyectos" asp-action="Index">Proyectos</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Notas" asp-action="Index">Notas</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Semestres" asp-action="Index">Semestres</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownAdministrativoMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Administrativo
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownAdministrativoMenuButton">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Estudiantes" asp-action="Index">Estudiantes</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Tutores" asp-action="Index">Tutores</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Conversaciones" asp-action="Index">Conversaciones</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Documentos" asp-action="Index">Documentos</a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownAdministrativoMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Administrativo
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownAdministrativoMenuButton">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Estudiantes" asp-action="Index">Estudiantes</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Tutores" asp-action="Index">Tutores</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Conversaciones" asp-action="Index">Conversaciones</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Documentos" asp-action="Index">Documentos</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownEmpresarialMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Empresarial
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownEmpresarialMenuButton">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Contactos" asp-action="Index">Contactos</a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownEmpresarialMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Empresarial
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownEmpresarialMenuButton">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Contactos" asp-action="Index">Contactos</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    }
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -68,7 +74,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Fase práctica - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - Fase práctica - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
