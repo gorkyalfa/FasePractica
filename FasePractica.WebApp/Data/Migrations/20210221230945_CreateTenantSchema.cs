@@ -2,7 +2,7 @@
 
 namespace FasePractica.WebApp.Data.Migrations
 {
-    public partial class ModelosTenant : Migration
+    public partial class CreateTenantSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

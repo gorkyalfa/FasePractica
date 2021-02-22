@@ -288,13 +288,13 @@ namespace FasePractica.WebApp.Data.Migrations
             modelBuilder.Entity("FasePractica.WebApp.Models.Global.UsuarioPorInstituto", b =>
                 {
                     b.HasOne("FasePractica.WebApp.Models.Global.Instituto", "Instituto")
-                        .WithMany("UsuarioPorInstituto")
+                        .WithMany("Usuarios")
                         .HasForeignKey("InstitutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FasePractica.WebApp.Models.Global.Usuario", "Usuario")
-                        .WithMany("UsuarioPorInstituto")
+                        .WithMany("Institutos")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -357,12 +357,12 @@ namespace FasePractica.WebApp.Data.Migrations
 
             modelBuilder.Entity("FasePractica.WebApp.Models.Global.Instituto", b =>
                 {
-                    b.Navigation("UsuarioPorInstituto");
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("FasePractica.WebApp.Models.Global.Usuario", b =>
                 {
-                    b.Navigation("UsuarioPorInstituto");
+                    b.Navigation("Institutos");
                 });
 #pragma warning restore 612, 618
         }

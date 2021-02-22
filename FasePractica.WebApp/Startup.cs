@@ -26,11 +26,11 @@ namespace FasePractica.WebApp
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            
+                    Configuration.GetConnectionString("SeguridadConnection")));
+
             services.AddDbContext<TenantDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("NegocioConnection")));
 
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseNpgsql(
@@ -82,17 +82,31 @@ namespace FasePractica.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.Use(async (context, next) =>
+            {
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    if (context.Request.Cookies.TryGetValue("Tenant", out string tenant))
+                        _ = TenantStorage.Instance(tenant);
+                }
+                else
+                {
+                    if (context.Request.Cookies.ContainsKey("Tenant"))
+                    {
+                        context.Response.Cookies.Delete("Tenant");
+                    }
+                    TenantStorage.Remove();
+                }
+
+                await next.Invoke();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                
-                // TODO : Gorky configurar los tenant y a partir del valor establecer el schema en el tenantdbcontext
-                //endpoints.MapControllerRoute(
-                //    name: "default",
-                //    pattern: "{tenant=BJ}/{controller=Home}/{action=Index}/{id?}");
-                
+
                 endpoints.MapRazorPages();
             });
         }

@@ -1,4 +1,5 @@
 ﻿using FasePractica.WebApp.Models;
+using FasePractica.WebApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace FasePractica.WebApp.Data
@@ -12,6 +13,15 @@ namespace FasePractica.WebApp.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // Comentar la declaración de la variable "tenant" y el "if" cuando quiera crear un nuevo schema  
+            var tenant = TenantStorage.Instance().Tenant;
+            if (!string.IsNullOrEmpty(tenant))
+                builder.HasDefaultSchema(TenantStorage.Instance().Tenant);
+
+            // Descomentar y remplazar el valor "t1" con el nombre del schema que desea construir
+            // Crear migracion y actualizar la base de datos
+            //builder.HasDefaultSchema("t1");
+
             builder.Entity<Persona>()
                 .HasDiscriminator<string>("TipoPersona")
                 .HasValue<Contacto>("Contacto")

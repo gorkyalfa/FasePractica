@@ -17,6 +17,6 @@ namespace FasePractica.WebApp.Models.Global
         [MaxLength(10)]
         public string TenantName { get; set; }
 
-        public List<UsuarioPorInstituto> UsuarioPorInstituto { get; set; }
+        public List<UsuarioPorInstituto> Usuarios { get; set; }
     }
 }

@@ -18,6 +18,6 @@ namespace FasePractica.WebApp.Models.Global
         [MaxLength(50)]
         public string Correo { get; set; }
 
-        public List<UsuarioPorInstituto> UsuarioPorInstituto { get; set; }
+        public List<UsuarioPorInstituto> Institutos { get; set; }
     }
 }

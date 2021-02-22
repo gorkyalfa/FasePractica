@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using FasePractica.WebApp.Data;
+using FasePractica.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -76,7 +76,7 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
-                return RedirectToPage("./Login", new {ReturnUrl = returnUrl });
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -86,9 +86,10 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
+                new TenantManager(_dbContext, HttpContext).CreateTenantStorage(info.Principal.FindFirstValue(ClaimTypes.Email));
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
@@ -123,7 +124,7 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
-            if (!EsCorreoPermitido(info)) 
+            if (!new TenantManager(_dbContext, HttpContext).EsCorreoPermitido(info))
             {
                 ErrorMessage = "No está autorizada para utilizar esta aplicación.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -160,7 +161,7 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
                         }
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-
+                        new TenantManager(_dbContext, HttpContext).CreateTenantStorage(user.Email);
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -173,20 +174,6 @@ namespace FasePractica.WebApp.Areas.Identity.Pages.Account
             ProviderDisplayName = info.ProviderDisplayName;
             ReturnUrl = returnUrl;
             return Page();
-        }
-
-        private bool EsCorreoPermitido(ExternalLoginInfo info)
-        {
-            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-            {
-                var correo = info.Principal.FindFirstValue(ClaimTypes.Email);
-                if (string.IsNullOrEmpty(correo))
-                    return false;
-                
-                var usuario = _dbContext.Usuarios.FirstOrDefault(u => u.Correo == correo);
-                return usuario != null;
-            }
-            return false;
         }
     }
 }
