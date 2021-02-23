@@ -24,7 +24,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Empresas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Empresas.ToListAsync());
+            return View(await _context.Empresas.Include(e=>e.Tutor).ToListAsync());
         }
 
         // GET: Empresas/Details/5

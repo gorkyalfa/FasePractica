@@ -13,12 +13,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TituloProfesional)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CodigoIgnug)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Nombres)
             </th>
             <th>
@@ -31,9 +25,6 @@
                 @Html.DisplayNameFor(model => model.CorreoInstitucional)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CorreoPersonal)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Telefono)
             </th>
             <th></th>
@@ -42,12 +33,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TituloProfesional)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodigoIgnug)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nombres)
             </td>
@@ -59,9 +44,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CorreoInstitucional)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CorreoPersonal)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Telefono)

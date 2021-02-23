@@ -19,12 +19,6 @@
                 @Html.DisplayNameFor(model => model.Alias)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipoEmpresa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoPersona)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Ruc)
             </th>
             <th>
@@ -32,21 +26,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Correo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SectorProductivo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Latitud)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Longitud)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TutorId)
@@ -61,59 +40,39 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Alias)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoEmpresa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoPersona)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ruc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Correo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SectorProductivo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Latitud)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Longitud)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TutorId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstudiantesConvenio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstudiantesActuales)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EmpresaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmpresaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmpresaId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Alias)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ruc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Correo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tutor.DataValueField)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstudiantesConvenio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstudiantesActuales)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EmpresaId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EmpresaId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EmpresaId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "type": "mssql.onprem",
+      "connectionId": "SeguridadConnection",
+      "secretStore": "AzureAppSettings"
+    },
+    "mssql3": {
+      "type": "mssql.onprem",
+      "connectionId": "NegocioConnection",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
