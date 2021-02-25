@@ -1,4 +1,5 @@
-using FasePractica.WebApp.Data;
+using FasePractica.Data;
+using FasePractica.Services;
 using FasePractica.WebApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,17 +25,36 @@ namespace FasePractica.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("SeguridadConnection")));
+            // Set the active provider via configuration
+            var provider = Configuration.GetValue("Provider", "SqlServer");
 
-            services.AddDbContext<TenantDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("NegocioConnection")));
+            services.AddDbContext<ApplicationDbContext>(
+                    options => _ = provider switch
+                    {
+                        "Npgsql" => options.UseNpgsql(
+                            Configuration.GetConnectionString("NpgsqlSeguridadConnection"),
+                            x => x.MigrationsAssembly("FasePractica.Data")),
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseNpgsql(
-            //        Configuration.GetConnectionString("DefaultConnection")));
+                        "SqlServer" => options.UseSqlServer(
+                            Configuration.GetConnectionString("SqlServerSeguridadConnection"),
+                            x => x.MigrationsAssembly("SqlServerMigrations")),
+
+                        _ => throw new Exception($"Unsupported provider: {provider}")
+                    });
+
+            services.AddDbContext<TenantDbContext>(
+                    options => _ = provider switch
+                    {
+                        "Npgsql" => options.UseNpgsql(
+                            Configuration.GetConnectionString("NpgsqlNegocioConnection"),
+                            x => x.MigrationsAssembly("FasePractica.Data")),
+
+                        "SqlServer" => options.UseSqlServer(
+                            Configuration.GetConnectionString("SqlServerNegocioConnection"),
+                            x => x.MigrationsAssembly("SqlServerMigrations")),
+
+                        _ => throw new Exception($"Unsupported provider: {provider}")
+                    });
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

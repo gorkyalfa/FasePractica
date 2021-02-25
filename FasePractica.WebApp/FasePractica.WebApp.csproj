@@ -21,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClienteOAUTH.txt" />
+    <None Remove="istbj.PublishSettings" />
+    <None Remove="ScaffoldingReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.3" />
@@ -34,6 +40,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
     <PackageReference Include="SendGrid" Version="9.22.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FasePractica.Data\FasePractica.Data.csproj" />
+    <ProjectReference Include="..\FasePractica.Services\FasePractica.Services.csproj" />
   </ItemGroup>
 
 </Project>

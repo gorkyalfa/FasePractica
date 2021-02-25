@@ -26,6 +26,7 @@ namespace FasePractica.WebApp.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
+                // TODO : "gestrella@yavirac.edu.ec" get from  "AdministratorEmailAddress" appsettings
                 From = new EmailAddress("gestrella@yavirac.edu.ec", Options.SendGridUser),
                 Subject = subject,
                 PlainTextContent = message,

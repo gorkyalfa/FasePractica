@@ -1,5 +1,5 @@
 ﻿using System;
-using FasePractica.WebApp.Data;
+using FasePractica.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;

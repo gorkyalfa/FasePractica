@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FasePractica.WebApp.Data;
-using FasePractica.WebApp.Models;
+using FasePractica.Data;
+using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FasePractica.WebApp.Controllers

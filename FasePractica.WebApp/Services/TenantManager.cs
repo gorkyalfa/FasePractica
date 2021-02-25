@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
-using FasePractica.WebApp.Data;
+using FasePractica.Data;
+using FasePractica.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

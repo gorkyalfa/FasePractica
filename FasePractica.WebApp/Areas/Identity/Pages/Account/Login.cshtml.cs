@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using FasePractica.WebApp.Services;
-using FasePractica.WebApp.Data;
+using FasePractica.Data;
 
 namespace FasePractica.WebApp.Areas.Identity.Pages.Account
 {
