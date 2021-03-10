@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -48,6 +49,24 @@ namespace FasePractica.WebApp.Controllers
         // GET: Documentos/Create
         public IActionResult Create()
         {
+            var tiposDocumento = new[]
+            {
+                new { TipoDocumento = (int)TipoDocumento.Acta, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Acta) },
+                new { TipoDocumento = (int)TipoDocumento.Convenio, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Convenio)},
+                new { TipoDocumento = (int)TipoDocumento.Extension, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Extension)},
+                new { TipoDocumento = (int)TipoDocumento.InformeTecnicoViabilidad, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.InformeTecnicoViabilidad)},
+                new { TipoDocumento = (int)TipoDocumento.Memorando, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Memorando)},
+                new { TipoDocumento = (int)TipoDocumento.Otro, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Otro)}
+            };
+            ViewData["TipoDocumento"] = new SelectList(tiposDocumento, "TipoDocumento", "DataValueField");
+            var estado = new[]
+            {
+                new{ Estado = (int)Estado.PorFirmar, DataValueField = Enum.GetName(typeof(Estado), Estado.PorFirmar)},
+                new{ Estado = (int)Estado.Firmado, DataValueField = Enum.GetName(typeof(Estado), Estado.Firmado)},
+                new{ Estado = (int)Estado.Caducado, DataValueField = Enum.GetName(typeof(Estado), Estado.Caducado)}
+
+            };
+            ViewData["Estado"] = new SelectList(estado, "Estado", "DataValueField");
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField");
             return View();
         }
@@ -65,6 +84,24 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var tiposDocumento = new[]
+            {
+                new { TipoDocumento = (int)TipoDocumento.Acta, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Acta) },
+                new { TipoDocumento = (int)TipoDocumento.Convenio, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Convenio)},
+                new { TipoDocumento = (int)TipoDocumento.Extension, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Extension)},
+                new { TipoDocumento = (int)TipoDocumento.InformeTecnicoViabilidad, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.InformeTecnicoViabilidad)},
+                new { TipoDocumento = (int)TipoDocumento.Memorando, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Memorando)},
+                new { TipoDocumento = (int)TipoDocumento.Otro, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Otro)}
+            };
+            ViewData["TipoDocumento"] = new SelectList(tiposDocumento, "TipoDocumento", "DataValueField", documento.Tipo);
+            var estado = new[]
+            {
+                new{ Estado = (int)Estado.PorFirmar, DataValueField = Enum.GetName(typeof(Estado), Estado.PorFirmar)},
+                new{ Estado = (int)Estado.Firmado, DataValueField = Enum.GetName(typeof(Estado), Estado.Firmado)},
+                new{ Estado = (int)Estado.Caducado, DataValueField = Enum.GetName(typeof(Estado), Estado.Caducado)}
+
+            };
+            ViewData["Estado"] = new SelectList(estado, "Estado", "DataValueField", documento.Estado);
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField", documento.EmpresaId);
             return View(documento);
         }
@@ -82,6 +119,24 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
+            var tiposDocumento = new[]
+            {
+                new { TipoDocumento = (int)TipoDocumento.Acta, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Acta) },
+                new { TipoDocumento = (int)TipoDocumento.Convenio, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Convenio)},
+                new { TipoDocumento = (int)TipoDocumento.Extension, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Extension)},
+                new { TipoDocumento = (int)TipoDocumento.InformeTecnicoViabilidad, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.InformeTecnicoViabilidad)},
+                new { TipoDocumento = (int)TipoDocumento.Memorando, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Memorando)},
+                new { TipoDocumento = (int)TipoDocumento.Otro, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Otro)}
+            };
+            ViewData["TipoDocumento"] = new SelectList(tiposDocumento, "TipoDocumento", "DataValueField", documento.Tipo);
+            var estado = new[]
+            {
+                new{ Estado = (int)Estado.PorFirmar, DataValueField = Enum.GetName(typeof(Estado), Estado.PorFirmar)},
+                new{ Estado = (int)Estado.Firmado, DataValueField = Enum.GetName(typeof(Estado), Estado.Firmado)},
+                new{ Estado = (int)Estado.Caducado, DataValueField = Enum.GetName(typeof(Estado), Estado.Caducado)}
+
+            };
+            ViewData["Estado"] = new SelectList(estado, "Estado", "DataValueField", documento.Estado);
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField", documento.EmpresaId);
             return View(documento);
         }
@@ -118,6 +173,24 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var tiposDocumento = new[]
+            {
+                new { TipoDocumento = (int)TipoDocumento.Acta, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Acta) },
+                new { TipoDocumento = (int)TipoDocumento.Convenio, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Convenio)},
+                new { TipoDocumento = (int)TipoDocumento.Extension, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Extension)},
+                new { TipoDocumento = (int)TipoDocumento.InformeTecnicoViabilidad, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.InformeTecnicoViabilidad)},
+                new { TipoDocumento = (int)TipoDocumento.Memorando, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Memorando)},
+                new { TipoDocumento = (int)TipoDocumento.Otro, DataValueField = Enum.GetName(typeof(TipoDocumento), TipoDocumento.Otro)}
+            };
+            ViewData["TipoDocumento"] = new SelectList(tiposDocumento, "TipoDocumento", "DataValueField", documento.Tipo);
+            var estado = new[]
+            {
+                new{ Estado = (int)Estado.PorFirmar, DataValueField = Enum.GetName(typeof(Estado), Estado.PorFirmar)},
+                new{ Estado = (int)Estado.Firmado, DataValueField = Enum.GetName(typeof(Estado), Estado.Firmado)},
+                new{ Estado = (int)Estado.Caducado, DataValueField = Enum.GetName(typeof(Estado), Estado.Caducado)}
+
+            };
+            ViewData["Estado"] = new SelectList(estado, "Estado", "DataValueField", documento.Estado);
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "DataValueField", documento.EmpresaId);
             return View(documento);
         }

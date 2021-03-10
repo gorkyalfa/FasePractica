@@ -24,7 +24,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Proyectos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre);
+            var applicationDbContext = _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre).Include(p => p.TutorAcademico).Include(p => p.TutorEmpresarial);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -39,6 +39,8 @@ namespace FasePractica.WebApp.Controllers
             var proyecto = await _context.Proyectos
                 .Include(p => p.Empresa)
                 .Include(p => p.Semestre)
+                .Include(p => p.TutorAcademico)
+                .Include(p => p.TutorEmpresarial)
                 .FirstOrDefaultAsync(m => m.ProyectoId == id);
             if (proyecto == null)
             {
@@ -53,6 +55,8 @@ namespace FasePractica.WebApp.Controllers
         {
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias");
             ViewData["SemestreId"] = new SelectList(_context.Semestres, "SemestreId", "Nombre");
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField");
+            ViewData["ContactoId"] = new SelectList(_context.Contactos, "PersonaId", "DataValueField");
             return View();
         }
 
@@ -71,6 +75,8 @@ namespace FasePractica.WebApp.Controllers
             }
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", proyecto.EmpresaId);
             ViewData["SemestreId"] = new SelectList(_context.Semestres, "SemestreId", "Nombre", proyecto.SemestreId);
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField", proyecto.TutorId);
+            ViewData["ContactoId"] = new SelectList(_context.Contactos, "PersonaId", "DataValueField", proyecto.ContactoId);
             return View(proyecto);
         }
 
@@ -89,6 +95,8 @@ namespace FasePractica.WebApp.Controllers
             }
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", proyecto.EmpresaId);
             ViewData["SemestreId"] = new SelectList(_context.Semestres, "SemestreId", "Nombre", proyecto.SemestreId);
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField", proyecto.TutorId);
+            ViewData["ContactoId"] = new SelectList(_context.Contactos, "PersonaId", "DataValueField", proyecto.ContactoId);
             return View(proyecto);
         }
 
@@ -126,6 +134,8 @@ namespace FasePractica.WebApp.Controllers
             }
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", proyecto.EmpresaId);
             ViewData["SemestreId"] = new SelectList(_context.Semestres, "SemestreId", "Nombre", proyecto.SemestreId);
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField", proyecto.TutorId);
+            ViewData["ContactoId"] = new SelectList(_context.Contactos, "PersonaId", "DataValueField", proyecto.ContactoId);
             return View(proyecto);
         }
 
@@ -140,6 +150,8 @@ namespace FasePractica.WebApp.Controllers
             var proyecto = await _context.Proyectos
                 .Include(p => p.Empresa)
                 .Include(p => p.Semestre)
+                .Include(p => p.TutorAcademico)
+                .Include(p => p.TutorEmpresarial)
                 .FirstOrDefaultAsync(m => m.ProyectoId == id);
             if (proyecto == null)
             {

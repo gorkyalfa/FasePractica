@@ -24,7 +24,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Notas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Notas.Include(n => n.Proyecto);
+            var applicationDbContext = _context.Notas.Include(n => n.Proyecto).Include(n => n.Estudiante);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,6 +38,7 @@ namespace FasePractica.WebApp.Controllers
 
             var nota = await _context.Notas
                 .Include(n => n.Proyecto)
+                .Include(n => n.Estudiante)
                 .FirstOrDefaultAsync(m => m.NotaId == id);
             if (nota == null)
             {
@@ -50,7 +51,9 @@ namespace FasePractica.WebApp.Controllers
         // GET: Notas/Create
         public IActionResult Create()
         {
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "Descripcion");
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p=>p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField");
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField");
+
             return View();
         }
 
@@ -67,7 +70,8 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "Descripcion", nota.ProyectoId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField", nota.ProyectoId);
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField", nota.EstudianteId);
             return View(nota);
         }
 
@@ -79,12 +83,16 @@ namespace FasePractica.WebApp.Controllers
                 return NotFound();
             }
 
-            var nota = await _context.Notas.FindAsync(id);
+            var nota = await _context.Notas
+                .Include(n => n.Proyecto)
+                .Include(n => n.Estudiante)
+                .FirstOrDefaultAsync(n=>n.NotaId == id);
             if (nota == null)
             {
                 return NotFound();
             }
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "Descripcion", nota.ProyectoId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField", nota.ProyectoId);
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField", nota.EstudianteId);
             return View(nota);
         }
 
@@ -120,7 +128,8 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "Descripcion", nota.ProyectoId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField", nota.ProyectoId);
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField", nota.EstudianteId);
             return View(nota);
         }
 
@@ -134,6 +143,7 @@ namespace FasePractica.WebApp.Controllers
 
             var nota = await _context.Notas
                 .Include(n => n.Proyecto)
+                .Include(n => n.Estudiante)
                 .FirstOrDefaultAsync(m => m.NotaId == id);
             if (nota == null)
             {

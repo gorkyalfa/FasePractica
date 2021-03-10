@@ -44,6 +44,6 @@ namespace FasePractica.Data.Models
         public List<Nota> Notas { get; set; }
 
         [NotMapped]
-        public string DataValueField { get { return $"{Semestre.DataValueField} {Nombre} {Empresa.DataValueField}"; } }
+        public string DataValueField { get { return $"{Nombre} {Semestre?.DataValueField} {Empresa?.DataValueField}"; } }
     }
 }

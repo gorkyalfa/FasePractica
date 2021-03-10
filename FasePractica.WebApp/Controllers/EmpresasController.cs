@@ -24,7 +24,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Empresas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Empresas.Include(e=>e.Tutor).ToListAsync());
+            return View(await _context.Empresas.Include(e => e.Tutor).ToListAsync());
         }
 
         // GET: Empresas/Details/5
@@ -35,7 +35,7 @@ namespace FasePractica.WebApp.Controllers
                 return NotFound();
             }
 
-            var empresa = await _context.Empresas
+            var empresa = await _context.Empresas.Include(e => e.Tutor)
                 .FirstOrDefaultAsync(m => m.EmpresaId == id);
             if (empresa == null)
             {
@@ -48,6 +48,20 @@ namespace FasePractica.WebApp.Controllers
         // GET: Empresas/Create
         public IActionResult Create()
         {
+            var tiposEmpresa = new[]
+            {
+                new { TipoEmpresa = (int)TipoEmpresa.Privado, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Privado) },
+                new { TipoEmpresa = (int)TipoEmpresa.Publico, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Publico) }
+            };
+            ViewData["TipoEmpresa"] = new SelectList(tiposEmpresa, "TipoEmpresa", "DataValueField");
+
+            var tipoPersona = new[]
+            {
+                new { TipoPersona = (int)TipoPersona.Juridica, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Juridica) },
+                new { TipoPersona = (int)TipoPersona.Natural, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Natural) }
+            };
+            ViewData["TipoPersona"] = new SelectList(tipoPersona, "TipoPersona", "DataValueField");
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField");
             return View();
         }
 
@@ -64,6 +78,20 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var tiposEmpresa = new[]
+            {
+                new { TipoEmpresa = (int)TipoEmpresa.Privado, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Privado) },
+                new { TipoEmpresa = (int)TipoEmpresa.Publico, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Publico) }
+            };
+            ViewData["TipoEmpresa"] = new SelectList(tiposEmpresa, "TipoEmpresa", "DataValueField", empresa.TipoEmpresa);
+
+            var tipoPersona = new[]
+            {
+                new { TipoPersona = (int)TipoPersona.Juridica, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Juridica) },
+                new { TipoPersona = (int)TipoPersona.Natural, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Natural) }
+            };
+            ViewData["TipoPersona"] = new SelectList(tipoPersona, "TipoPersona", "DataValueField", empresa.TipoPersona);
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField", empresa.TutorId);
             return View(empresa);
         }
 
@@ -80,6 +108,20 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
+            var tiposEmpresa = new[]
+            {
+                new { TipoEmpresa = (int)TipoEmpresa.Privado, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Privado) },
+                new { TipoEmpresa = (int)TipoEmpresa.Publico, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Publico) }
+            };
+            ViewData["TipoEmpresa"] = new SelectList(tiposEmpresa, "TipoEmpresa", "DataValueField", empresa.TipoEmpresa);
+
+            var tipoPersona = new[]
+            {
+                new { TipoPersona = (int)TipoPersona.Juridica, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Juridica) },
+                new { TipoPersona = (int)TipoPersona.Natural, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Natural) }
+            };
+            ViewData["TipoPersona"] = new SelectList(tipoPersona, "TipoPersona", "DataValueField", empresa.TipoPersona);
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField", empresa.TutorId);
             return View(empresa);
         }
 
@@ -115,6 +157,20 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var tiposEmpresa = new[]
+            {
+                new { TipoEmpresa = (int)TipoEmpresa.Privado, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Privado) },
+                new { TipoEmpresa = (int)TipoEmpresa.Publico, DataValueField = Enum.GetName(typeof(TipoEmpresa), TipoEmpresa.Publico) }
+            };
+            ViewData["TipoEmpresa"] = new SelectList(tiposEmpresa, "TipoEmpresa", "DataValueField", empresa.TipoEmpresa);
+
+            var tipoPersona = new[]
+            {
+                new { TipoPersona = (int)TipoPersona.Juridica, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Juridica) },
+                new { TipoPersona = (int)TipoPersona.Natural, DataValueField = Enum.GetName(typeof(TipoPersona), TipoPersona.Natural) }
+            };
+            ViewData["TipoPersona"] = new SelectList(tipoPersona, "TipoPersona", "DataValueField", empresa.TipoPersona);
+            ViewData["TutorId"] = new SelectList(_context.Tutores, "PersonaId", "DataValueField", empresa.TutorId);
             return View(empresa);
         }
 

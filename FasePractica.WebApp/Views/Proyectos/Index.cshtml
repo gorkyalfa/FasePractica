@@ -55,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.Tecnologia)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TutorId)
+                @Html.DisplayFor(modelItem => item.TutorAcademico.DataValueField)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContactoId)
+                @Html.DisplayFor(modelItem => item.TutorEmpresarial.DataValueField)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProyectoId">Edit</a> |

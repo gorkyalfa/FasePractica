@@ -50,6 +50,13 @@ namespace FasePractica.WebApp.Controllers
         // GET: Conversaciones/Create
         public IActionResult Create()
         {
+            var estadosConversacion = new[]
+            {
+                new { Estado = (int)EstadoConversacion.PorRealizar, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.PorRealizar) },
+                new { Estado = (int)EstadoConversacion.EnProceso, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.EnProceso) },
+                new { Estado = (int)EstadoConversacion.Listo, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.Listo) }
+            };
+            ViewData["EstadoConversacion"] = new SelectList(estadosConversacion, "Estado", "DataValueField");
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias");
             return View();
         }
@@ -67,6 +74,13 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var estadosConversacion = new[]
+            {
+                new { Estado = (int)EstadoConversacion.PorRealizar, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.PorRealizar) },
+                new { Estado = (int)EstadoConversacion.EnProceso, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.EnProceso) },
+                new { Estado = (int)EstadoConversacion.Listo, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.Listo) }
+            };
+            ViewData["EstadoConversacion"] = new SelectList(estadosConversacion, "Estado", "DataValueField", conversacion.Estado);
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", conversacion.EmpresaId);
             return View(conversacion);
         }
@@ -84,6 +98,13 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
+            var estadosConversacion = new[]
+            {
+                new { Estado = (int)EstadoConversacion.PorRealizar, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.PorRealizar) },
+                new { Estado = (int)EstadoConversacion.EnProceso, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.EnProceso) },
+                new { Estado = (int)EstadoConversacion.Listo, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.Listo) }
+            };
+            ViewData["EstadoConversacion"] = new SelectList(estadosConversacion, "Estado", "DataValueField", conversacion.Estado);
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", conversacion.EmpresaId);
             return View(conversacion);
         }
@@ -120,6 +141,13 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var estadosConversacion = new[]
+            {
+                new { Estado = (int)EstadoConversacion.PorRealizar, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.PorRealizar) },
+                new { Estado = (int)EstadoConversacion.EnProceso, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.EnProceso) },
+                new { Estado = (int)EstadoConversacion.Listo, DataValueField = Enum.GetName(typeof(EstadoConversacion), EstadoConversacion.Listo) }
+            };
+            ViewData["EstadoConversacion"] = new SelectList(estadosConversacion, "Estado", "DataValueField", conversacion.Estado);
             ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", conversacion.EmpresaId);
             return View(conversacion);
         }
