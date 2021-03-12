@@ -107,7 +107,13 @@ namespace FasePractica.WebApp
                 if (context.User.Identity.IsAuthenticated)
                 {
                     if (context.Request.Cookies.TryGetValue("Tenant", out string tenant))
-                        _ = TenantStorage.Instance(tenant);
+                    {
+                        var partes = tenant.Split('-');
+                        var nombreInstituto = string.Empty;
+                        if (partes.Length > 1)
+                            nombreInstituto = partes[1];
+                        _ = TenantStorage.Instance(partes[0], nombreInstituto);
+                    }
                 }
                 else
                 {

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<InstitutoViewModel>
+@{
+    ViewData["Title"] = "Seleccionar";
+}
+
+<h1>Institutos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr @if (item.Actual) { <text> class="table-primary" </text> }>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @if (item.Actual)
+                    {
+                        <button class="btn btn-outline-primary disabled">Actual</button>
+                    }
+                    else
+                    {
+                        <form asp-action="Update">
+                            <input type="hidden" name="institutoId" value="@item.InstitutoId"/>
+                            <button type="submit" class="btn btn-primary">Seleccionar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,5 +1,3 @@
-using System;
-
 namespace FasePractica.WebApp.Models
 {
     public class ErrorViewModel

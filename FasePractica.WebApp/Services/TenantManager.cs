@@ -26,8 +26,8 @@ namespace FasePractica.WebApp.Services
                 var instituto = _dbContext.Institutos.FirstOrDefault(i => i.InstitutoId == usuarioPorInstituto.InstitutoId);
                 if (instituto != null)
                 {
-                    _httpContext.Response.Cookies.Append("tenant", instituto.TenantName);
-                    TenantStorage.Instance(instituto.TenantName);
+                    _httpContext.Response.Cookies.Append("Tenant", $"{instituto.TenantName}-{instituto.Nombre}");
+                    TenantStorage.Instance(instituto.TenantName, instituto.Nombre);
                 }
             }
         }
