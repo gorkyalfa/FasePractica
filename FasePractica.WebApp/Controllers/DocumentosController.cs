@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
-using System;
+using Microsoft.Extensions.Configuration;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -14,17 +15,37 @@ namespace FasePractica.WebApp.Controllers
     public class DocumentosController : Controller
     {
         private readonly TenantDbContext _context;
+        private IConfiguration _configuration;
 
-        public DocumentosController(TenantDbContext context)
+        public DocumentosController(TenantDbContext context,IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Documentos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pagina)
         {
-            var applicationDbContext = _context.Documentos.Include(d => d.Empresa);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Documentos.Include(d => d.Empresa);
+            
+            var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
+            if(pagina==null || pagina<=0)
+            {
+                pagina=1;
+            }
+            var skip = ((int)pagina-1)*tamanoPagina;
+            var documentos = await _context.Documentos.Include(d => d.Empresa).Skip(skip).Take(tamanoPagina).ToListAsync();
+            var totalDocumentos = _context.Documentos.Count();
+            int totalPaginas = totalDocumentos/tamanoPagina;
+            if(totalDocumentos%tamanoPagina!=0)
+            {
+                totalPaginas+=1;
+            }
+            ViewData["PaginaActual"] = pagina;
+            ViewData["TotalPaginas"] = totalPaginas;
+            return View(documentos);
+
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Documentos/Details/5
