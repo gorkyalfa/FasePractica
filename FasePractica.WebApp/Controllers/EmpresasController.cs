@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -15,16 +16,33 @@ namespace FasePractica.WebApp.Controllers
     public class EmpresasController : Controller
     {
         private readonly TenantDbContext _context;
+        private IConfiguration _configuration;
 
-        public EmpresasController(TenantDbContext context)
+        public EmpresasController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Empresas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pagina)
         {
-            return View(await _context.Empresas.Include(e => e.Tutor).ToListAsync());
+            var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
+            if(pagina==null || pagina<=0)
+            {
+                pagina=1;
+            }
+            var skip = ((int)pagina-1)*tamanoPagina;
+            var empresas = await _context.Empresas.Include(e => e.Tutor).Skip(skip).Take(tamanoPagina).ToListAsync();
+            var totalEmpresas = _context.Empresas.Count();
+            int totalPaginas = totalEmpresas/tamanoPagina;
+            if(totalEmpresas%tamanoPagina!=0)
+            {
+                totalPaginas+=1;
+            }
+            ViewData["PaginaActual"] = pagina;
+            ViewData["TotalPaginas"] = totalPaginas;
+            return View(empresas);
         }
 
         // GET: Empresas/Details/5
