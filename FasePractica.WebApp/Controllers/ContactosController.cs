@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -15,17 +16,33 @@ namespace FasePractica.WebApp.Controllers
     public class ContactosController : Controller
     {
         private readonly TenantDbContext _context;
+        private IConfiguration _configuration;
 
-        public ContactosController(TenantDbContext context)
+        public ContactosController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Contactos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pagina)
         {
-            var applicationDbContext = _context.Contactos.Include(c => c.Empresa);
-            return View(await applicationDbContext.ToListAsync());
+            var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
+            if(pagina==null || pagina<=0)
+            {
+                pagina=1;
+            }
+            var skip = ((int)pagina-1)*tamanoPagina;
+            var contactos = await _context.Contactos.Include(c => c.Empresa).Skip(skip).Take(tamanoPagina).ToListAsync();
+            var totalContactos = _context.Contactos.Count();
+            int totalPaginas = totalContactos/tamanoPagina;
+            if(totalContactos%tamanoPagina!=0)
+            {
+                totalPaginas+=1;
+            }
+            ViewData["PaginaActual"] = pagina;
+            ViewData["TotalPaginas"] = totalPaginas;
+            return View(contactos);
         }
 
         // GET: Contactos/Details/5

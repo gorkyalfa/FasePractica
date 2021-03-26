@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -15,17 +16,33 @@ namespace FasePractica.WebApp.Controllers
     public class ProyectosController : Controller
     {
         private readonly TenantDbContext _context;
+        private IConfiguration _configuration;
 
-        public ProyectosController(TenantDbContext context)
+        public ProyectosController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Proyectos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pagina)
         {
-            var applicationDbContext = _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre).Include(p => p.TutorAcademico).Include(p => p.TutorEmpresarial);
-            return View(await applicationDbContext.ToListAsync());
+            var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
+            if(pagina==null || pagina<=0)
+            {
+                pagina=1;
+            }
+            var skip = ((int)pagina-1)*tamanoPagina;
+            var proyectos = await _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre).Include(p => p.TutorAcademico).Include(p => p.TutorEmpresarial).Skip(skip).Take(tamanoPagina).ToListAsync();
+            var totalProyectos = _context.Proyectos.Count();
+            int totalPaginas = totalProyectos/tamanoPagina;
+            if(totalProyectos%tamanoPagina!=0)
+            {
+                totalPaginas+=1;
+            }
+            ViewData["PaginaActual"] = pagina;
+            ViewData["TotalPaginas"] = totalPaginas;
+            return View(proyectos);
         }
 
         // GET: Proyectos/Details/5
