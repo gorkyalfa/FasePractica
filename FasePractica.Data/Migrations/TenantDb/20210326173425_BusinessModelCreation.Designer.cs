@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FasePractica.Data.Migrations.TenantDb
 {
     [DbContext(typeof(TenantDbContext))]
-    [Migration("20210224213634_CreateInitialBusinessModel")]
-    partial class CreateInitialBusinessModel
+    [Migration("20210326173425_BusinessModelCreation")]
+    partial class BusinessModelCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,24 @@ namespace FasePractica.Data.Migrations.TenantDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("FasePractica.Data.Models.Carrera", b =>
+                {
+                    b.Property<int>("CarreraId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Logo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("text");
+
+                    b.HasKey("CarreraId");
+
+                    b.ToTable("Carreras");
+                });
 
             modelBuilder.Entity("FasePractica.Data.Models.Conversacion", b =>
                 {
@@ -172,6 +190,32 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.ToTable("Empresas");
                 });
 
+            modelBuilder.Entity("FasePractica.Data.Models.Nivel", b =>
+                {
+                    b.Property<int>("NivelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("CarreraId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HorasPractica")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Numero")
+                        .HasColumnType("integer");
+
+                    b.HasKey("NivelId");
+
+                    b.HasIndex("CarreraId");
+
+                    b.ToTable("Niveles");
+                });
+
             modelBuilder.Entity("FasePractica.Data.Models.Nota", b =>
                 {
                     b.Property<int>("NotaId")
@@ -188,19 +232,19 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.Property<int>("EstudianteId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProyectoId")
+                    b.Property<int>("NivelId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ProyectoId1")
+                    b.Property<int>("ProyectoId")
                         .HasColumnType("integer");
 
                     b.HasKey("NotaId");
 
                     b.HasIndex("EstudianteId");
 
-                    b.HasIndex("ProyectoId");
+                    b.HasIndex("NivelId");
 
-                    b.HasIndex("ProyectoId1");
+                    b.HasIndex("ProyectoId");
 
                     b.ToTable("Notas");
                 });
@@ -260,6 +304,16 @@ namespace FasePractica.Data.Migrations.TenantDb
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("AlmacenadoEn")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Beneficios")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Comentario")
+                        .HasColumnType("text");
+
                     b.Property<int>("ContactoId")
                         .HasColumnType("integer");
 
@@ -271,13 +325,28 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.Property<int>("EmpresaId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Indicador")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Meta")
+                        .HasColumnType("text");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("Objetivo")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RealizadoEl")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int>("SemestreId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("SituacionActual")
+                        .HasColumnType("text");
 
                     b.Property<string>("Tecnologia")
                         .IsRequired()
@@ -335,17 +404,12 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.Property<int>("EmpresaId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EmpresaId1")
-                        .HasColumnType("integer");
-
                     b.Property<string>("TituloProfesional")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.HasIndex("EmpresaId");
-
-                    b.HasIndex("EmpresaId1");
 
                     b.ToTable("Personas");
 
@@ -356,9 +420,14 @@ namespace FasePractica.Data.Migrations.TenantDb
                 {
                     b.HasBaseType("FasePractica.Data.Models.Persona");
 
+                    b.Property<int>("CarreraId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CodigoIgnug")
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
+
+                    b.HasIndex("CarreraId");
 
                     b.ToTable("Personas");
 
@@ -418,25 +487,40 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.Navigation("Tutor");
                 });
 
+            modelBuilder.Entity("FasePractica.Data.Models.Nivel", b =>
+                {
+                    b.HasOne("FasePractica.Data.Models.Carrera", "Carrera")
+                        .WithMany("Niveles")
+                        .HasForeignKey("CarreraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrera");
+                });
+
             modelBuilder.Entity("FasePractica.Data.Models.Nota", b =>
                 {
                     b.HasOne("FasePractica.Data.Models.Estudiante", "Estudiante")
-                        .WithMany()
+                        .WithMany("Notas")
                         .HasForeignKey("EstudianteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FasePractica.Data.Models.Proyecto", "Proyecto")
-                        .WithMany()
-                        .HasForeignKey("ProyectoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("FasePractica.Data.Models.Nivel", "Nivel")
+                        .WithMany("Notas")
+                        .HasForeignKey("NivelId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FasePractica.Data.Models.Proyecto", null)
+                    b.HasOne("FasePractica.Data.Models.Proyecto", "Proyecto")
                         .WithMany("Notas")
-                        .HasForeignKey("ProyectoId1");
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Estudiante");
+
+                    b.Navigation("Nivel");
 
                     b.Navigation("Proyecto");
                 });
@@ -446,11 +530,11 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.HasOne("FasePractica.Data.Models.Contacto", "TutorEmpresarial")
                         .WithMany()
                         .HasForeignKey("ContactoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FasePractica.Data.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("Proyectos")
                         .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -462,9 +546,9 @@ namespace FasePractica.Data.Migrations.TenantDb
                         .IsRequired();
 
                     b.HasOne("FasePractica.Data.Models.Tutor", "TutorAcademico")
-                        .WithMany()
+                        .WithMany("Proyectos")
                         .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Empresa");
@@ -479,16 +563,30 @@ namespace FasePractica.Data.Migrations.TenantDb
             modelBuilder.Entity("FasePractica.Data.Models.Contacto", b =>
                 {
                     b.HasOne("FasePractica.Data.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("Contactos")
                         .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FasePractica.Data.Models.Empresa", null)
-                        .WithMany("Contactos")
-                        .HasForeignKey("EmpresaId1");
-
                     b.Navigation("Empresa");
+                });
+
+            modelBuilder.Entity("FasePractica.Data.Models.Estudiante", b =>
+                {
+                    b.HasOne("FasePractica.Data.Models.Carrera", "Carrera")
+                        .WithMany("Estudiantes")
+                        .HasForeignKey("CarreraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrera");
+                });
+
+            modelBuilder.Entity("FasePractica.Data.Models.Carrera", b =>
+                {
+                    b.Navigation("Estudiantes");
+
+                    b.Navigation("Niveles");
                 });
 
             modelBuilder.Entity("FasePractica.Data.Models.Empresa", b =>
@@ -498,6 +596,13 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.Navigation("Conversaciones");
 
                     b.Navigation("Documentos");
+
+                    b.Navigation("Proyectos");
+                });
+
+            modelBuilder.Entity("FasePractica.Data.Models.Nivel", b =>
+                {
+                    b.Navigation("Notas");
                 });
 
             modelBuilder.Entity("FasePractica.Data.Models.Proyecto", b =>
@@ -510,9 +615,16 @@ namespace FasePractica.Data.Migrations.TenantDb
                     b.Navigation("Proyectos");
                 });
 
+            modelBuilder.Entity("FasePractica.Data.Models.Estudiante", b =>
+                {
+                    b.Navigation("Notas");
+                });
+
             modelBuilder.Entity("FasePractica.Data.Models.Tutor", b =>
                 {
                     b.Navigation("Empresas");
+
+                    b.Navigation("Proyectos");
                 });
 #pragma warning restore 612, 618
         }

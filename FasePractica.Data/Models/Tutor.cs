@@ -12,7 +12,9 @@ namespace FasePractica.Data.Models
         public string TituloProfesional { get; set; }
 
         public List<Empresa> Empresas { get; set; }
-        
+
+        public List<Proyecto> Proyectos { get; set; }
+
         [Display(Name = "Código Ignug")]
         [MaxLength(32)]
         public string CodigoIgnug { get; set; }

@@ -10,7 +10,6 @@ using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 
-
 namespace FasePractica.WebApp.Controllers
 {
     [Authorize]
@@ -44,8 +43,6 @@ namespace FasePractica.WebApp.Controllers
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
             return View(semestres);
-
-            //return View(await _context.Semestres.ToListAsync());
         }
 
         // GET: Semestres/Details/5

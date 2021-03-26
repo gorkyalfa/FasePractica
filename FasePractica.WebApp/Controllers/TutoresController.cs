@@ -43,8 +43,6 @@ namespace FasePractica.WebApp.Controllers
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
             return View(tutores);
-
-            //return View(await _context.Tutores.ToListAsync());
         }
 
         // GET: Tutores/Details/5

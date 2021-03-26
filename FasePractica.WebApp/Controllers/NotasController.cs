@@ -27,8 +27,6 @@ namespace FasePractica.WebApp.Controllers
         // GET: Notas
         public async Task<IActionResult> Index(int? pagina)
         {
-            //var applicationDbContext = _context.Notas.Include(n => n.Proyecto).Include(n => n.Estudiante);
-            
             var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
             if(pagina==null || pagina<=0)
             {
@@ -45,8 +43,6 @@ namespace FasePractica.WebApp.Controllers
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
             return View(notas);
-
-            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Notas/Details/5

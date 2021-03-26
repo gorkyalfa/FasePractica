@@ -10,7 +10,6 @@ using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 
-
 namespace FasePractica.WebApp.Controllers
 {
     [Authorize]
@@ -28,14 +27,13 @@ namespace FasePractica.WebApp.Controllers
         // GET: Empresas
         public async Task<IActionResult> Index(int? pagina)
         {
-            //
             var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
             if(pagina==null || pagina<=0)
             {
                 pagina=1;
             }
             var skip = ((int)pagina-1)*tamanoPagina;
-            var empresas = await _context.Empresas.Skip(skip).Take(tamanoPagina).ToListAsync();
+            var empresas = await _context.Empresas.Include(e => e.Tutor).Skip(skip).Take(tamanoPagina).ToListAsync();
             var totalEmpresas = _context.Empresas.Count();
             int totalPaginas = totalEmpresas/tamanoPagina;
             if(totalEmpresas%tamanoPagina!=0)
@@ -45,8 +43,6 @@ namespace FasePractica.WebApp.Controllers
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
             return View(empresas);
-
-            //return View(await _context.Empresas.Include(e => e.Tutor).ToListAsync());
         }
 
         // GET: Empresas/Details/5

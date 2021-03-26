@@ -17,7 +17,7 @@ namespace FasePractica.WebApp.Controllers
     {
         private readonly TenantDbContext _context;
         private IConfiguration _configuration;
-
+        
         public EstudiantesController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;

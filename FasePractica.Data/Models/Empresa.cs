@@ -81,7 +81,9 @@ namespace FasePractica.Data.Models
         public List<Contacto> Contactos { get; set; }
         
         public List<Conversacion> Conversaciones { get; set; }
-        
+
+        public List<Proyecto> Proyectos { get; set; }
+
         [NotMapped]
         public string DataValueField { get { return $"{Alias}"; } }
     }
