@@ -53,7 +53,8 @@ namespace FasePractica.WebApp.Controllers
                 return NotFound();
             }
 
-            var empresa = await _context.Empresas.Include(e => e.Tutor)
+            var empresa = await _context.Empresas
+                .Include(e => e.Tutor)
                 .FirstOrDefaultAsync(m => m.EmpresaId == id);
             if (empresa == null)
             {
@@ -201,6 +202,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var empresa = await _context.Empresas
+                .Include(e => e.Tutor)
                 .FirstOrDefaultAsync(m => m.EmpresaId == id);
             if (empresa == null)
             {

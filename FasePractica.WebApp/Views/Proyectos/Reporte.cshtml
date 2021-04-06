@@ -1,0 +1,201 @@
+﻿@model FasePractica.WebApp.Models.ProyectoViewModel
+
+@{
+    ViewData["Title"] = "Reporte";
+}
+
+
+<h4>ProyectoViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Reporte">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="submit" value="Imprimir" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Imagen</th>
+                            <th class="text-center" scope="col">PLANEACIÓN PROYECTO EMPRESARIAL</th>
+                            <th scope="col">Imagen</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr>
+                            <th scope="row">NOMBRE ESTUDIANTE</th>
+                            <td colspan="3">@Model.NombreApellidoEstudiante</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">CARRERA</th>
+                            <td colspan="3">NOMBRE DE LA CARRERA</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">NIVEL</th>
+                            <td>NIVEL ESTUDIANTE</td>
+                            <th scope="row">PERÍODO LECTIVO</th>
+                            <td>MES INICIO - MES FINAL</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">ENTIDAD FORMADORA</th>
+                            <td colspan="3">EMPRESA FORMADORA</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">HORAS DE FORMACIÓN PRÁCTICA</th>
+                            <td colspan="3">HORAS</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr>
+                            <th scope="row">TÍTULO DE PROYECTO</th>
+                            <td>NOMBRE DE PROYECTO</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" colspan="2">ANÁLISIS DE LA SITUACIÓN ACTUAL(DESCRIPCIÓN DEL PROBLEMA O LA TAREA)</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">OBJETIVO DEL PROYECTO</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">DESCRIPCIÓN DEL PROCEDIMIENTO DE IDENTIFICACIÓN DEL PROYECTO (¿PORQUE SE ESCOGIÓ ESTE PROYECTO?)</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">INDICADOR</th>
+                            <th scope="row">MEDICIÓN / FÓRMULA</th>
+                        </tr>
+                        <tr>
+                            <td>NOMBRE INDICADOR</td>
+                            <td>NOMBRE MEDICIÓN</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">META</th>
+                            <th scope="row">FUENTE DE DATOS</th>
+                        </tr>
+                        <tr>
+                            <td>NOMBRE META</td>
+                            <td>NOMBRE FUENTE DE DATOS</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">PRESUPUESTO</th>
+                            <th scope="row">BENEFICIOS ESPERADOS</th>
+                        </tr>
+                        <tr>
+                            <td>PRESUPUESTO ESPERADO</td>
+                            <td>BENEFICIOS ESTUDIANTE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th colspan="7">COMENTARIOS:</th>
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>FECHA</th>
+                            <td colspan="6">FECHA DE PRESENTACIÓN</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <th colspan="2">COORDINADOR DE CARRERA DE LA IES</th>
+                            <th colspan="2">ESTUDIANTE</th>
+                            <th colspan="2">TUTOR GENERAL DE LA ENTIDAD FORMADORA</th>
+                        </tr>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <td colspan="2">NOMBRE DEL COORDINADOR DE CARRERA</td>
+                            <td colspan="2">NOMBRE DEL ESTUDIANTE</td>
+                            <td colspan="2">NOMBRE DEL TUTOR</td>
+                        </tr>
+                        <tr>
+                            <th>FIRMA</th>
+                            <td colspan="2">FIRMA DEL COORDINADOR DE CARRERA</td>
+                            <td colspan="2">FIRMA DEL ESTUDIANTE</td>
+                            <td colspan="2">FIRMA DEL TUTOR</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- tabla dos -->
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm">
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin tabla dos-->
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

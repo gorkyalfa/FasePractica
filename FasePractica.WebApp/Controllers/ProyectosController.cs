@@ -9,6 +9,7 @@ using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using FasePractica.WebApp.Models;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -187,6 +188,35 @@ namespace FasePractica.WebApp.Controllers
             _context.Proyectos.Remove(proyecto);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Reporte(int id)
+        {
+            //int indiceEstudiante = 1;
+            //TODO, ANDERSON - Esto se debe proporcionar desde la vista
+            //var proyecto = await _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre).Include(p => p.TutorAcademico).Include(p => p.TutorEmpresarial).ToListAsync();
+
+            var proyecto = await _context.Proyectos.FindAsync(id);
+            if (proyecto == null)
+            {
+                return NotFound();
+            }
+            var proyectoViewModel = new ProyectoViewModel();
+            
+            //ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", proyecto.EmpresaId);
+
+            var datosNombre = ViewData["EstudianteId"] = new SelectList(_context.Notas, "EstudianteId", "Nombre", proyecto);
+
+            proyectoViewModel.NombreApellidoEstudiante = datosNombre.ToString();
+            //List<Nota> Notas = proyecto.Notas.ToList();
+
+            //TODO, ANDERSON - Llenar proyecto view model con los datos para visualizar
+            //proyectoViewModel.NombreApellidoEstudiante = proyecto.Notas[indiceEstudiante].EstudianteId;
+            //proyectoViewModel.NombreApellidoEstudiante = $"{proyecto.Notas[indiceEstudiante].Estudiante.Nombres} {proyecto.Notas[indiceEstudiante].Estudiante.Apellidos}";
+
+            //proyectoViewModel.NombreApellidoEstudiante = Notas[indiceEstudiante];
+
+            return View(proyectoViewModel);
         }
 
         private bool ProyectoExists(int id)
