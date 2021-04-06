@@ -33,7 +33,7 @@ namespace FasePractica.WebApp.Controllers
                 pagina=1;
             }
             var skip = ((int)pagina-1)*tamanoPagina;   
-            var estudiantes = await _context.Estudiantes.Skip(skip).Take(tamanoPagina).ToListAsync();
+            var estudiantes = await _context.Estudiantes.Include(e => e.Carrera).Skip(skip).Take(tamanoPagina).ToListAsync();
             var totalEstudiantes = _context.Estudiantes.Count();
             int totalPaginas = totalEstudiantes/tamanoPagina;
             if(totalEstudiantes%tamanoPagina!=0)
@@ -54,6 +54,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var estudiante = await _context.Estudiantes
+                .Include(e => e.Carrera)
                 .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (estudiante == null)
             {
@@ -66,6 +67,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Estudiantes/Create
         public IActionResult Create()
         {
+            ViewData["CarreraId"] = new SelectList(_context.Carreras, "CarreraId", "Nombre");
             return View();
         }
 
@@ -74,7 +76,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CodigoIgnug,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Estudiante estudiante)
+        public async Task<IActionResult> Create([Bind("CodigoIgnug,CarreraId,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Estudiante estudiante)
         {
             if (ModelState.IsValid)
             {
@@ -82,6 +84,7 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CarreraId"] = new SelectList(_context.Carreras, "CarreraId", "Nombre", estudiante.CarreraId);
             return View(estudiante);
         }
 
@@ -98,6 +101,7 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
+            ViewData["CarreraId"] = new SelectList(_context.Carreras, "CarreraId", "Nombre", estudiante.CarreraId);
             return View(estudiante);
         }
 
@@ -106,7 +110,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CodigoIgnug,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Estudiante estudiante)
+        public async Task<IActionResult> Edit(int id, [Bind("CodigoIgnug,CarreraId,PersonaId,Nombres,Apellidos,Cedula,CorreoInstitucional,CorreoPersonal,Telefono")] Estudiante estudiante)
         {
             if (id != estudiante.PersonaId)
             {
@@ -133,6 +137,7 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CarreraId"] = new SelectList(_context.Carreras, "CarreraId", "Nombre", estudiante.CarreraId);
             return View(estudiante);
         }
 
@@ -145,6 +150,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var estudiante = await _context.Estudiantes
+                .Include(e => e.Carrera)
                 .FirstOrDefaultAsync(m => m.PersonaId == id);
             if (estudiante == null)
             {
