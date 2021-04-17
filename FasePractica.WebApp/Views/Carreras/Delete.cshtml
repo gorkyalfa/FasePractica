@@ -19,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Logo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Logo)
+            <img src="data:image/png;base64,@Model.Logo" alt="Logo de @Model.Nombre" style="width:200px; height:200px;" />
         </dd>
     </dl>
     
