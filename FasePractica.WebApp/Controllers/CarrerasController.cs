@@ -7,16 +7,30 @@ using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace FasePractica.WebApp.Controllers
 {
     public class CarrerasController : Controller
     {
         private readonly TenantDbContext _context;
+        private IConfiguration _configuration;
+        private readonly Dictionary<string, List<byte[]>> _fileSignature =
+            new Dictionary<string, List<byte[]>>
+        {
+            { ".png", new List<byte[]>
+                {
+                    new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }
+                }
+            },
+        };
 
-        public CarrerasController(TenantDbContext context)
+
+        public CarrerasController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Carreras
@@ -56,27 +70,41 @@ namespace FasePractica.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CarreraId,Nombre")] Carrera carrera, IFormFile logoFile)
         {
-
             if (ModelState.IsValid)
             {
-                //TODO ANderson :Verificar Firma y extencion
-                if(logoFile.FileName.Substring(logoFile.FileName.LastIndexOf('.')).ToLower()!="png")
+                if (logoFile.FileName.Substring(logoFile.FileName.LastIndexOf('.')).ToLower() != ".png")
                 {
                     return BadRequest("Solo se aceptan archivos .png");
                 }
                 using (var memoryStream = new MemoryStream())
                 {
-                   
+
                     logoFile.CopyTo(memoryStream);
-                    if (memoryStream.Length > 204800)
+                    if (memoryStream.Length > _configuration.GetValue<int>("FileSizeLimit"))
                     {
                         return BadRequest("Tamano maximo logo 200KB");
-                    } 
+                    }
                     var buffer = memoryStream.ToArray();
-                    // Aqui verificar firma 
+ 
+                    using (var reader = new BinaryReader(memoryStream))
+                    {
+                        var signatures = _fileSignature[".png"];
+                        memoryStream.Position = 0;
+
+                        var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
+
+                        var isValidSignature = signatures.Any(signature =>
+                            headerBytes.Take(signature.Length).SequenceEqual(signature));
+                        if (!isValidSignature)
+                        {
+                            return BadRequest("La firma no coincide con la extension del archivo.");
+                        }
+                    }                  
                     carrera.Logo = Convert.ToBase64String(buffer);
                 }
+
                 _context.Add(carrera);
+ 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -104,13 +132,12 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarreraId,Nombre,Logo")] Carrera carrera)
+        public async Task<IActionResult> Edit(int id, [Bind("CarreraId,Nombre,Logo")] Carrera carrera, IFormFile logoFile)
         {
             if (id != carrera.CarreraId)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
