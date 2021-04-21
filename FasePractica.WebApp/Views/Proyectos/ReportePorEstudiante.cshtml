@@ -19,7 +19,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Reporte" asp-route-id="@Model.ProyectoId">Back to Report</a>
 </div>
 
 <div class="container">
@@ -48,140 +48,150 @@
             <div class="table-responsive">
                 <table class="table table-bordered table-sm">
                     <tbody>
-                        <tr>
-                            <th scope="row">NOMBRE ESTUDIANTE</th>
-                            <td colspan="3">@Model.NombreApellidoEstudiante</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">CARRERA</th>
-                            <td colspan="3">@Model.NombreDeCarrera</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">NIVEL</th>
-                            <td>@Model.NivelEstudiante</td>
-                            <th scope="row">PERÍODO LECTIVO</th>
-                            <td>@Model.PeriodoLectivoEstudiante</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">ENTIDAD FORMADORA</th>
-                            <td colspan="3">@Model.NombreEmpresaFormadora</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">HORAS DE FORMACIÓN PRÁCTICA</th>
-                            <td colspan="3">@Model.HorasFormacionParactica</td>
+                        <tr>                            
+                            <td> <b>NOMBRE ESTUDIANTE:</b> @Model.NombreApellidoEstudiante</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+     </div>
     <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-bordered table-sm">
-                    <tbody>
-                        <tr>
-                            <th scope="row">TÍTULO DE PROYECTO</th>
-                            <td>@Model.NombreProyecto</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" colspan="2">ANÁLISIS DE LA SITUACIÓN ACTUAL(DESCRIPCIÓN DEL PROBLEMA O LA TAREA)</th>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <p>@Model.SituacionActual</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th colspan="2">OBJETIVO DEL PROYECTO</th>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <p>@Model.ObjetivoProyecto</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th colspan="2">DESCRIPCIÓN DEL PROCEDIMIENTO DE IDENTIFICACIÓN DEL PROYECTO (¿PORQUE SE ESCOGIÓ ESTE PROYECTO?)</th>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <p>@Model.Descripcion</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">INDICADOR</th>
-                            <th scope="row">META</th>
-                        </tr>
-                        <tr>
-                            <td>@Model.Indicador</td>
-                            <td>@Model.Meta</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" colspan="2">BENEFICIOS ESPERADOS</th>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Model.Beneficios</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <tbody>
+                            <tr>
+                                <th scope="row">NOMBRE ESTUDIANTE</th>
+                                <td colspan="3">@Model.NombreApellidoEstudiante</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">CARRERA</th>
+                                <td colspan="3">@Model.NombreDeCarrera</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">NIVEL</th>
+                                <td>@Model.NivelEstudiante</td>
+                                <th scope="row">PERÍODO LECTIVO</th>
+                                <td>@Model.PeriodoLectivoEstudiante</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ENTIDAD FORMADORA</th>
+                                <td colspan="3">@Model.NombreEmpresaFormadora</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">HORAS DE FORMACIÓN PRÁCTICA</th>
+                                <td colspan="3">@Model.HorasFormacionParactica</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <th colspan="7">COMENTARIOS:</th>
-                        </tr>
-                        <tr>
-                            <td colspan="7">
-                                <p>@Model.Comentario</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>FECHA</th>
-                            <td colspan="6">@Model.FechaProyecto.ToString("dd/MM/yyyy")</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <th colspan="2">COORDINADOR DE CARRERA DE LA IES</th>
-                            <th colspan="2">ESTUDIANTE</th>
-                            <th colspan="2">TUTOR GENERAL DE LA ENTIDAD FORMADORA</th>
-                        </tr>
-                        <tr>
-                            <th>NOMBRE</th>
-                            <td colspan="2">@Model.NombreCoordinadorCarrera</td>
-                            <td colspan="2">@Model.NombreApellidoEstudiante</td>
-                            <td colspan="2">@Model.NombreTutorEmpresarial</td>
-                        </tr>
-                        <tr>
-                            <th>FIRMA</th>
-                            <td colspan="2"> </td>
-                            <td colspan="2"> </td>
-                            <td colspan="2"> </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <tbody>
+                            <tr>
+                                <th scope="row">TÍTULO DE PROYECTO</th>
+                                <td colspan="3">@Model.NombreProyecto</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" colspan="2">ANÁLISIS DE LA SITUACIÓN ACTUAL(DESCRIPCIÓN DEL PROBLEMA O LA TAREA)</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p>@Model.SituacionActual</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">OBJETIVO DEL PROYECTO</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p>@Model.ObjetivoProyecto</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">DESCRIPCIÓN DEL PROCEDIMIENTO DE IDENTIFICACIÓN DEL PROYECTO (¿PORQUE SE ESCOGIÓ ESTE PROYECTO?)</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p>@Model.Descripcion</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">INDICADOR</th>
+                                <th scope="row">META</th>
+                            </tr>
+                            <tr>
+                                <td>@Model.Indicador</td>
+                                <td>@Model.Meta</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" colspan="2">BENEFICIOS ESPERADOS</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">@Model.Beneficios</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- tabla dos -->
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-bordered table-sm">
-                </table>
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th colspan="7">COMENTARIOS:</th>
+                            </tr>
+                            <tr>
+                                <td colspan="7">
+                                    <p>@Model.Comentario</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>FECHA</th>
+                                <td colspan="6">@Model.FechaProyecto.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="2">COORDINADOR DE CARRERA DE LA IES</th>
+                                <th colspan="2">TUTOR GENERAL DE LA ENTIDAD FORMADORA</th>
+                            </tr>
+                            <tr>
+                                <th>NOMBRE</th>
+                                <td colspan="2">@Model.NombreCoordinadorCarrera</td>
+                                <td colspan="2">@Model.NombreTutorEmpresarial</td>
+                            </tr>
+                            <tr>
+                                <th>FIRMA</th>
+                                <td colspan="2"> </td>
+                                <td colspan="2"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+
+        <!-- tabla dos -->
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- fin tabla dos-->
+
     </div>
 
-    <!-- fin tabla dos-->
-
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
