@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h4>Lista de documentos</h4>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -75,7 +75,6 @@
 }
     </tbody>
 </table>
-
 <tfoot>
         <nav aria-label="...">
             <ul class="pagination">
@@ -87,13 +86,13 @@
                     if(i+1 == (int)ViewData["PaginaActual"])
                     {
                         <li class="page-item active" aria-current="page">
-                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">i+1</a>
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">@(i+1)</a>
                         </li>
                     }
                     else
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">i+1</a>
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">@(i+1)</a>
                         </li>
                     }
                 }

@@ -27,15 +27,13 @@ namespace FasePractica.WebApp.Controllers
         // GET: Notas
         public async Task<IActionResult> Index(int? pagina)
         {
-            //var applicationDbContext = _context.Notas.Include(n => n.Proyecto).Include(n => n.Estudiante);
-            
             var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
             if(pagina==null || pagina<=0)
             {
                 pagina=1;
             }
             var skip = ((int)pagina-1)*tamanoPagina;
-            var notas = await _context.Notas.Include(n => n.Proyecto).Include(n => n.Estudiante).Skip(skip).Take(tamanoPagina).ToListAsync();
+            var notas = await _context.Notas.Include(n => n.Proyecto).Include(n => n.Nivel).Include(n => n.Estudiante).Skip(skip).Take(tamanoPagina).ToListAsync();
             var totalNotas = _context.Notas.Count();
             int totalPaginas = totalNotas/tamanoPagina;
             if(totalNotas%tamanoPagina!=0)
@@ -45,8 +43,6 @@ namespace FasePractica.WebApp.Controllers
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
             return View(notas);
-
-            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Notas/Details/5
@@ -59,6 +55,7 @@ namespace FasePractica.WebApp.Controllers
 
             var nota = await _context.Notas
                 .Include(n => n.Proyecto)
+                .Include(n => n.Nivel)
                 .Include(n => n.Estudiante)
                 .FirstOrDefaultAsync(m => m.NotaId == id);
             if (nota == null)
@@ -72,9 +69,9 @@ namespace FasePractica.WebApp.Controllers
         // GET: Notas/Create
         public IActionResult Create()
         {
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p=>p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField");
-            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField");
-
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p=>p.Empresa).Include(p => p.Semestre), "ProyectoId", "Descripcion", "DataValueField");
+            ViewData["NivelId"] = new SelectList(_context.Niveles, "NivelId", "Nombre");
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "Apellidos", "DataValueField");
             return View();
         }
 
@@ -83,7 +80,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NotaId,EstudianteId,ProyectoId,Calificacion,Aprueba")] Nota nota)
+        public async Task<IActionResult> Create([Bind("NotaId,EstudianteId,NivelId,ProyectoId,Calificacion,Aprueba")] Nota nota)
         {
             if (ModelState.IsValid)
             {
@@ -91,8 +88,9 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField", nota.ProyectoId);
-            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField", nota.EstudianteId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "Descripcion", nota.ProyectoId);
+            ViewData["NivelId"] = new SelectList(_context.Niveles, "NivelId", "Nombre", nota.NivelId);
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "Apellidos", nota.EstudianteId);
             return View(nota);
         }
 
@@ -112,8 +110,9 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField", nota.ProyectoId);
-            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField", nota.EstudianteId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "Descripcion", nota.ProyectoId);
+            ViewData["NivelId"] = new SelectList(_context.Niveles, "NivelId", "Nombre", nota.NivelId);
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "Apellidos", nota.EstudianteId);
             return View(nota);
         }
 
@@ -122,7 +121,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NotaId,EstudianteId,ProyectoId,Calificacion,Aprueba")] Nota nota)
+        public async Task<IActionResult> Edit(int id, [Bind("NotaId,EstudianteId,NivelId,ProyectoId,Calificacion,Aprueba")] Nota nota)
         {
             if (id != nota.NotaId)
             {
@@ -149,8 +148,9 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "DataValueField", nota.ProyectoId);
-            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "DataValueField", nota.EstudianteId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre), "ProyectoId", "Descripcion", nota.ProyectoId);
+            ViewData["NivelId"] = new SelectList(_context.Niveles, "NivelId", "Nombre", nota.NivelId);
+            ViewData["EstudianteId"] = new SelectList(_context.Estudiantes, "PersonaId", "Apellidos", nota.EstudianteId);
             return View(nota);
         }
 
@@ -164,6 +164,7 @@ namespace FasePractica.WebApp.Controllers
 
             var nota = await _context.Notas
                 .Include(n => n.Proyecto)
+                .Include(n => n.Nivel)
                 .Include(n => n.Estudiante)
                 .FirstOrDefaultAsync(m => m.NotaId == id);
             if (nota == null)

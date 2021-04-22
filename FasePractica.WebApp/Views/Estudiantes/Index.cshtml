@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h4>Lista de estudiantes</h4>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,6 +26,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Carrera)
             </th>
             <th></th>
         </tr>
@@ -49,6 +52,9 @@
                 @Html.DisplayFor(modelItem => item.Telefono)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Carrera.Nombre)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.PersonaId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PersonaId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.PersonaId">Delete</a>
@@ -57,7 +63,6 @@
 }
     </tbody>
 </table>
-
 <tfoot>
         <nav aria-label="...">
             <ul class="pagination">
@@ -69,13 +74,13 @@
                     if(i+1 == (int)ViewData["PaginaActual"])
                     {
                         <li class="page-item active" aria-current="page">
-                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">i+1</a>
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">@(i+1)</a>
                         </li>
                     }
                     else
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">i+1</a>
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">@(i+1)</a>
                         </li>
                     }
                 }

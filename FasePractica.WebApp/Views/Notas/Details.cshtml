@@ -4,34 +4,38 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Nota</h4>
+    <h4>Detalle nota</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.EstudianteId)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estudiante.DataValueField)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Estudiante.Apellidos)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nivel)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nivel.Nombre)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Proyecto)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Proyecto.Descripcion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Calificacion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Calificacion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Aprueba)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Aprueba)
         </dd>
     </dl>

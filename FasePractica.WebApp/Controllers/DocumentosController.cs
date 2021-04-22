@@ -17,7 +17,7 @@ namespace FasePractica.WebApp.Controllers
         private readonly TenantDbContext _context;
         private IConfiguration _configuration;
 
-        public DocumentosController(TenantDbContext context,IConfiguration configuration)
+        public DocumentosController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
@@ -26,8 +26,6 @@ namespace FasePractica.WebApp.Controllers
         // GET: Documentos
         public async Task<IActionResult> Index(int? pagina)
         {
-            //var applicationDbContext = _context.Documentos.Include(d => d.Empresa);
-            
             var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
             if(pagina==null || pagina<=0)
             {
@@ -44,8 +42,6 @@ namespace FasePractica.WebApp.Controllers
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
             return View(documentos);
-
-            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Documentos/Details/5

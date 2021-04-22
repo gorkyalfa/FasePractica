@@ -1,0 +1,37 @@
+﻿@model FasePractica.Data.Models.Proyecto
+@using FasePractica.Data.Models
+@{
+    ViewData["Title"] = "Proyecto";
+}
+
+<h4>Seleccione el estudiante</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ReportePorEstudiante">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProyectoId"/>
+            <div class="form-group">
+                <label for="PersonaId" class="control-label"></label>
+                <select id="PersonaId" class="form-control">
+                    @foreach(Estudiante estudiante in (List<Estudiante>)(ViewData["Estudiantes"]))
+                    {
+                    <option value="@estudiante.PersonaId">@estudiante.DataValueField</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Consultar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

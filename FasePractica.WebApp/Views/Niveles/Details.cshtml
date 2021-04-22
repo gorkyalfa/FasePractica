@@ -1,0 +1,40 @@
+﻿@model FasePractica.Data.Models.Nivel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Detalle nivel</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Numero)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Numero)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HorasPractica)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HorasPractica)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Carrera)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Carrera.Nombre)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.NivelId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

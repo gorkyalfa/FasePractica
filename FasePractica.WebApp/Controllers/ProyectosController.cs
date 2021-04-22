@@ -9,6 +9,8 @@ using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using FasePractica.WebApp.Models;
+using System.Diagnostics;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -27,30 +29,21 @@ namespace FasePractica.WebApp.Controllers
         // GET: Proyectos
         public async Task<IActionResult> Index(int? pagina)
         {
-            //
-            //var applicationDbContext = _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre).Include(p => p.TutorAcademico).Include(p => p.TutorEmpresarial);
-            //
-
             var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
-            if(pagina==null || pagina<=0)
+            if (pagina == null || pagina <= 0)
             {
-                pagina=1;
+                pagina = 1;
             }
-            var skip = ((int)pagina-1)*tamanoPagina;
+            var skip = ((int)pagina - 1) * tamanoPagina;
             var proyectos = await _context.Proyectos.Include(p => p.Empresa).Include(p => p.Semestre).Include(p => p.TutorAcademico).Include(p => p.TutorEmpresarial).Skip(skip).Take(tamanoPagina).ToListAsync();
             var totalProyectos = _context.Proyectos.Count();
-            int totalPaginas = totalProyectos/tamanoPagina;
-            if(totalProyectos%tamanoPagina!=0)
+            int totalPaginas = totalProyectos / tamanoPagina;
+            if (totalProyectos % tamanoPagina != 0)
             {
-                totalPaginas+=1;
+                totalPaginas += 1;
             }
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
-            
-            //
-            //return View(await applicationDbContext.ToListAsync());
-            //
-
             return View(proyectos);
         }
 
@@ -196,6 +189,66 @@ namespace FasePractica.WebApp.Controllers
             _context.Proyectos.Remove(proyecto);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Reporte(int? id)
+        {
+            var proyecto = _context.Proyectos
+                .Include(p => p.Notas).ThenInclude(p => p.Estudiante)
+                .SingleOrDefault(p => p.ProyectoId == id);
+            var estudiantes = new List<Estudiante>();
+            foreach (var nota in proyecto.Notas)
+            {
+                estudiantes.Add(nota.Estudiante);
+            }
+            //TODO- Anderson - Crear un IComparer por DataVauleTextField
+            estudiantes.Sort();
+            ViewData["Estudiantes"] = estudiantes;
+            return View(proyecto);
+        }
+        public async Task<IActionResult> ReportePorEstudiante(int proyectoId, int personaId)
+        {
+            //TODO - Anderson - Filtrar estudiante por PersonaId
+            var proyecto = _context.Proyectos
+                .Include(p => p.Notas).ThenInclude(p => p.Estudiante)
+                .Include(p => p.Notas).ThenInclude(p => p.Nivel).ThenInclude(p => p.Carrera)
+                .Include(p => p.Empresa)
+                .Include(p => p.Semestre)
+                .Include(p => p.TutorAcademico)
+                .Include(p => p.TutorEmpresarial)
+                .SingleOrDefault(p => p.ProyectoId == proyectoId);
+            if (proyecto == null)
+            {
+                return NotFound();
+            }
+            var proyectoViewModel = new ProyectoViewModel();
+
+            int primerEstudiante = 0;
+            //foreach (var item in proyecto.Notas.ToArray())
+            //{
+            //    Debug.Write(item.Estudiante.Apellidos);
+            //    item.Estudiante.Apellidos = proyectoViewModel.NombreApellidoEstudiante;
+            //}
+            proyectoViewModel.NombreApellidoEstudiante = $"{proyecto.Notas[primerEstudiante].Estudiante.Nombres} {proyecto.Notas[primerEstudiante].Estudiante.Apellidos}";
+            proyectoViewModel.NombreDeCarrera = proyecto.Notas[primerEstudiante].Nivel.Carrera.Nombre;
+            proyectoViewModel.NivelEstudiante = proyecto.Notas[primerEstudiante].Nivel.Nombre;
+            proyectoViewModel.PeriodoLectivoEstudiante = proyecto.Semestre.Nombre;
+            proyectoViewModel.NombreEmpresaFormadora = proyecto.Empresa.Nombre;
+            proyectoViewModel.HorasFormacionParactica = proyecto.Notas[primerEstudiante].Nivel.HorasPractica;
+            proyectoViewModel.NombreProyecto = proyecto.Nombre;
+            proyectoViewModel.SituacionActual = proyecto.SituacionActual;
+            proyectoViewModel.ObjetivoProyecto = proyecto.Objetivo;
+            proyectoViewModel.Descripcion = proyecto.Descripcion;
+            proyectoViewModel.Indicador = proyecto.Indicador;
+            proyectoViewModel.Meta = proyecto.Meta;
+            proyectoViewModel.Beneficios = proyecto.Beneficios;
+            proyectoViewModel.Comentario = proyecto.Comentario;
+            proyectoViewModel.FechaProyecto = proyecto.RealizadoEl;
+            proyectoViewModel.NombreCoordinadorCarrera = $"{proyecto.TutorAcademico.Nombres} {proyecto.TutorAcademico.Apellidos}";
+            proyectoViewModel.NombreTutorEmpresarial = $"{proyecto.TutorEmpresarial.Nombres} {proyecto.TutorEmpresarial.Apellidos}";
+            proyectoViewModel.LogoMinisterio = proyecto.Notas[primerEstudiante].Nivel.Carrera.Logo;
+
+            return View(proyectoViewModel);
         }
 
         private bool ProyectoExists(int id)

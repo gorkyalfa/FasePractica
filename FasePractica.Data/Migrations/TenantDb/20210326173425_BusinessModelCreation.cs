@@ -4,10 +4,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FasePractica.Data.Migrations.TenantDb
 {
-    public partial class CreateInitialBusinessModel : Migration
+    public partial class BusinessModelCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Carreras",
+                columns: table => new
+                {
+                    CarreraId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nombre = table.Column<string>(type: "text", nullable: true),
+                    Logo = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carreras", x => x.CarreraId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Semestres",
                 columns: table => new
@@ -24,39 +38,25 @@ namespace FasePractica.Data.Migrations.TenantDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "Conversaciones",
+                name: "Niveles",
                 columns: table => new
                 {
-                    ConversacionId = table.Column<int>(type: "integer", nullable: false)
+                    NivelId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RealizadoEl = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    EmpresaId = table.Column<int>(type: "integer", nullable: false),
-                    Observaciones = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Estado = table.Column<int>(type: "integer", nullable: false)
+                    Nombre = table.Column<string>(type: "text", nullable: true),
+                    Numero = table.Column<int>(type: "integer", nullable: false),
+                    HorasPractica = table.Column<int>(type: "integer", nullable: false),
+                    CarreraId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Conversaciones", x => x.ConversacionId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Documentos",
-                columns: table => new
-                {
-                    DocumentoId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Codigo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    FirmadoEl = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    FechaFinal = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Descripcion = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    AlmacenadoEn = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Estado = table.Column<int>(type: "integer", nullable: false),
-                    Tipo = table.Column<int>(type: "integer", nullable: false),
-                    EmpresaId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Documentos", x => x.DocumentoId);
+                    table.PrimaryKey("PK_Niveles", x => x.NivelId);
+                    table.ForeignKey(
+                        name: "FK_Niveles_Carreras_CarreraId",
+                        column: x => x.CarreraId,
+                        principalTable: "Carreras",
+                        principalColumn: "CarreraId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,14 +75,20 @@ namespace FasePractica.Data.Migrations.TenantDb
                     TituloProfesional = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     CargoEmpresa = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     EmpresaId = table.Column<int>(type: "integer", nullable: true),
-                    EmpresaId1 = table.Column<int>(type: "integer", nullable: true),
                     CodigoIgnug = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    CarreraId = table.Column<int>(type: "integer", nullable: true),
                     Tutor_TituloProfesional = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     Tutor_CodigoIgnug = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Personas", x => x.PersonaId);
+                    table.ForeignKey(
+                        name: "FK_Personas_Carreras_CarreraId",
+                        column: x => x.CarreraId,
+                        principalTable: "Carreras",
+                        principalColumn: "CarreraId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,6 +125,54 @@ namespace FasePractica.Data.Migrations.TenantDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "Conversaciones",
+                columns: table => new
+                {
+                    ConversacionId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RealizadoEl = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EmpresaId = table.Column<int>(type: "integer", nullable: false),
+                    Observaciones = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Estado = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Conversaciones", x => x.ConversacionId);
+                    table.ForeignKey(
+                        name: "FK_Conversaciones_Empresas_EmpresaId",
+                        column: x => x.EmpresaId,
+                        principalTable: "Empresas",
+                        principalColumn: "EmpresaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Documentos",
+                columns: table => new
+                {
+                    DocumentoId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Codigo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    FirmadoEl = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    FechaFinal = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Descripcion = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    AlmacenadoEn = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Estado = table.Column<int>(type: "integer", nullable: false),
+                    Tipo = table.Column<int>(type: "integer", nullable: false),
+                    EmpresaId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documentos", x => x.DocumentoId);
+                    table.ForeignKey(
+                        name: "FK_Documentos_Empresas_EmpresaId",
+                        column: x => x.EmpresaId,
+                        principalTable: "Empresas",
+                        principalColumn: "EmpresaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Proyectos",
                 columns: table => new
                 {
@@ -127,10 +181,18 @@ namespace FasePractica.Data.Migrations.TenantDb
                     SemestreId = table.Column<int>(type: "integer", nullable: false),
                     EmpresaId = table.Column<int>(type: "integer", nullable: false),
                     Nombre = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    SituacionActual = table.Column<string>(type: "text", nullable: true),
+                    Objetivo = table.Column<string>(type: "text", nullable: true),
                     Descripcion = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Indicador = table.Column<string>(type: "text", nullable: true),
+                    Meta = table.Column<string>(type: "text", nullable: true),
+                    Beneficios = table.Column<string>(type: "text", nullable: true),
+                    Comentario = table.Column<string>(type: "text", nullable: true),
                     Tecnologia = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    RealizadoEl = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     TutorId = table.Column<int>(type: "integer", nullable: false),
-                    ContactoId = table.Column<int>(type: "integer", nullable: false)
+                    ContactoId = table.Column<int>(type: "integer", nullable: false),
+                    AlmacenadoEn = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -145,12 +207,14 @@ namespace FasePractica.Data.Migrations.TenantDb
                         name: "FK_Proyectos_Personas_ContactoId",
                         column: x => x.ContactoId,
                         principalTable: "Personas",
-                        principalColumn: "PersonaId");
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Proyectos_Personas_TutorId",
                         column: x => x.TutorId,
                         principalTable: "Personas",
-                        principalColumn: "PersonaId");
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Proyectos_Semestres_SemestreId",
                         column: x => x.SemestreId,
@@ -166,14 +230,20 @@ namespace FasePractica.Data.Migrations.TenantDb
                     NotaId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EstudianteId = table.Column<int>(type: "integer", nullable: false),
+                    NivelId = table.Column<int>(type: "integer", nullable: false),
                     ProyectoId = table.Column<int>(type: "integer", nullable: false),
                     Calificacion = table.Column<float>(type: "real", nullable: false),
-                    Aprueba = table.Column<bool>(type: "boolean", nullable: false),
-                    ProyectoId1 = table.Column<int>(type: "integer", nullable: true)
+                    Aprueba = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notas", x => x.NotaId);
+                    table.ForeignKey(
+                        name: "FK_Notas_Niveles_NivelId",
+                        column: x => x.NivelId,
+                        principalTable: "Niveles",
+                        principalColumn: "NivelId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Notas_Personas_EstudianteId",
                         column: x => x.EstudianteId,
@@ -184,13 +254,8 @@ namespace FasePractica.Data.Migrations.TenantDb
                         name: "FK_Notas_Proyectos_ProyectoId",
                         column: x => x.ProyectoId,
                         principalTable: "Proyectos",
-                        principalColumn: "ProyectoId");
-                    table.ForeignKey(
-                        name: "FK_Notas_Proyectos_ProyectoId1",
-                        column: x => x.ProyectoId1,
-                        principalTable: "Proyectos",
                         principalColumn: "ProyectoId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -209,9 +274,19 @@ namespace FasePractica.Data.Migrations.TenantDb
                 column: "TutorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Niveles_CarreraId",
+                table: "Niveles",
+                column: "CarreraId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notas_EstudianteId",
                 table: "Notas",
                 column: "EstudianteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notas_NivelId",
+                table: "Notas",
+                column: "NivelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notas_ProyectoId",
@@ -219,19 +294,14 @@ namespace FasePractica.Data.Migrations.TenantDb
                 column: "ProyectoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notas_ProyectoId1",
-                table: "Notas",
-                column: "ProyectoId1");
+                name: "IX_Personas_CarreraId",
+                table: "Personas",
+                column: "CarreraId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Personas_EmpresaId",
                 table: "Personas",
                 column: "EmpresaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Personas_EmpresaId1",
-                table: "Personas",
-                column: "EmpresaId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proyectos_ContactoId",
@@ -254,45 +324,18 @@ namespace FasePractica.Data.Migrations.TenantDb
                 column: "TutorId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Conversaciones_Empresas_EmpresaId",
-                table: "Conversaciones",
-                column: "EmpresaId",
-                principalTable: "Empresas",
-                principalColumn: "EmpresaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Documentos_Empresas_EmpresaId",
-                table: "Documentos",
-                column: "EmpresaId",
-                principalTable: "Empresas",
-                principalColumn: "EmpresaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_Personas_Empresas_EmpresaId",
                 table: "Personas",
                 column: "EmpresaId",
                 principalTable: "Empresas",
-                principalColumn: "EmpresaId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Personas_Empresas_EmpresaId1",
-                table: "Personas",
-                column: "EmpresaId1",
-                principalTable: "Empresas",
                 principalColumn: "EmpresaId",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Personas_Empresas_EmpresaId",
-                table: "Personas");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Personas_Empresas_EmpresaId1",
                 table: "Personas");
 
             migrationBuilder.DropTable(
@@ -305,6 +348,9 @@ namespace FasePractica.Data.Migrations.TenantDb
                 name: "Notas");
 
             migrationBuilder.DropTable(
+                name: "Niveles");
+
+            migrationBuilder.DropTable(
                 name: "Proyectos");
 
             migrationBuilder.DropTable(
@@ -315,6 +361,9 @@ namespace FasePractica.Data.Migrations.TenantDb
 
             migrationBuilder.DropTable(
                 name: "Personas");
+
+            migrationBuilder.DropTable(
+                name: "Carreras");
         }
     }
 }

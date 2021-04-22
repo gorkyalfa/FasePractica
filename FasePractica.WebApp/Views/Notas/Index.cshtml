@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h4>Lista de notas</h4>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,7 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EstudianteId)
+                @Html.DisplayNameFor(model => model.Estudiante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nivel)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Proyecto)
@@ -31,7 +34,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Estudiante.DataValueField)
+                @Html.DisplayFor(modelItem => item.Estudiante.Apellidos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nivel.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Proyecto.Descripcion)
@@ -51,7 +57,6 @@
 }
     </tbody>
 </table>
-
 <tfoot>
         <nav aria-label="...">
             <ul class="pagination">
@@ -63,13 +68,13 @@
                     if(i+1 == (int)ViewData["PaginaActual"])
                     {
                         <li class="page-item active" aria-current="page">
-                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">i+1</a>
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">@(i+1)</a>
                         </li>
                     }
                     else
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">i+1</a>
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@(i+1)">@(i+1)</a>
                         </li>
                     }
                 }
