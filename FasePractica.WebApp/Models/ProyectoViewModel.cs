@@ -4,6 +4,8 @@ namespace FasePractica.WebApp.Models
 {
     public class ProyectoViewModel
     {
+
+        public int ProyectoId { get; set; }
         public string NombreApellidoEstudiante { get; set; }
         public string NombreDeCarrera { get; set; }
         public string NivelEstudiante { get; set; }
@@ -22,6 +24,5 @@ namespace FasePractica.WebApp.Models
         public string NombreCoordinadorCarrera { get; set; }
         public string NombreTutorEmpresarial { get; set; }
         public string LogoMinisterio { get; set; }
-        //public string  { get; set; }
     }
 }
