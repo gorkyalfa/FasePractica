@@ -1,0 +1,97 @@
+﻿@using FasePractica.Data.Models;
+@using System.Collections.Generic;
+@{
+    ViewData["Title"] = "Consultar";
+}
+
+<h4>Consultar</h4>
+
+<div class="container">
+    <form id="principal" method="get" action="/estudiantes/consultardetalles">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <input type="hidden" name="personaId" id="personaId" />
+                    <input class="form-control col-10" type="text" id="nombre" placeholder="Ingrese el apellido" id="personaNombre" />
+                    <div class="spinner-border text-success col-2" role="status" id="spinnerBusqueda" style="display:none"></div>
+                </div>
+                <div class="row" id="popupBusquedaPersona" style="display:none">
+                    <ul class="list-group" id="listaPersonas">
+                        <li class="list-group-item">
+                            <span onclick="setPersonaId(1, 'Anderson Chanchay');">Anderson Chanchay</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="btn-group" role="group" aria-label="Herramientas">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#semestreModal">
+                        Semestres
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#documentoModal">
+                        Documentos
+                    </button>
+                    <button class="btn btn-primary" type="submit">Consultar</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal fade" id="semestreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Escoja los semestres</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @{List<Semestre> semestres = (List<Semestre>)ViewData["Semestres"];}
+                    @for (int i = 0; i < semestres.Count; i++)
+                    {
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" form="principal" type="checkbox" name="semestres" value="@semestres[i].SemestreId" />@semestres[i].DataValueField
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="documentoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Seleccione los documentos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @foreach (var item in (SelectList)ViewData["TipoDocumento"])
+                    {
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" form="principal" type="checkbox" name="documentos" value="@item.Value" />@item.Text
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/estudiantesConsultar.js"></script>
+}
