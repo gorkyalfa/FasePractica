@@ -175,5 +175,34 @@ namespace FasePractica.WebApp.Controllers
         {
             return _context.Estudiantes.Any(e => e.PersonaId == id);
         }
+
+        public IActionResult Consultar()
+        {
+            ViewData["Semestres"] = _context.Semestres.OrderByDescending(p=>p.FechaInicio).ToList();
+            var tiposDocumentos = new[]
+            {
+                new { TipoDocumento = 0, DataValueField = "Planeacion proyecto empresarial"},
+                new { TipoDocumento = 1, DataValueField = "Plan marco de formacion"},
+                new { TipoDocumento = 2, DataValueField = "Plan marco de rotacion"},
+                new { TipoDocumento = 3, DataValueField = "Informe semanal"},
+                new { TipoDocumento = 4, DataValueField = "Reporte nota fase practica"}
+            };
+            ViewData["TipoDocumento"] = new SelectList(tiposDocumentos, "TipoDocumento", "DataValueField");
+            return View();
+        }
+
+        public IActionResult ConsultarDetalles(int personaId, int[] semestres, int[] documentos)
+        {
+            var estudiante = _context.Estudiantes.Include(p => p.PersonaId == personaId);
+            //var estudiante = await _context.Estudiantes
+            //    .Include(e => e.PersonaId)
+            //    .FirstOrDefaultAsync(e => e.PersonaId == personaId);
+            //if (estudiante == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return View();
+        }
     }
 }
