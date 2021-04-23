@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
-    $('#personaNombre').change(function () {
+    $('#personaNombre').keyup(function () {
         var criterios = $('#personaNombre').val();
         if (criterios.length >= 3) {
             var baseUrl = window.location.origin;
