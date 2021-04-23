@@ -12,11 +12,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SemestreId" class="control-label"></label>
-                <select asp-for="SemestreId" class ="form-control" asp-items="ViewBag.SemestreId"></select>
+                <select asp-for="SemestreId" class="form-control" asp-items="ViewBag.SemestreId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="EmpresaId" class="control-label"></label>
-                <select asp-for="EmpresaId" class ="form-control" asp-items="ViewBag.EmpresaId"></select>
+                <select asp-for="EmpresaId" class="form-control" asp-items="ViewBag.EmpresaId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
@@ -24,14 +24,49 @@
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="SituacionActual" class="control-label"></label>
+                <input asp-for="SituacionActual" class="form-control" />
+                <span asp-validation-for="SituacionActual" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Objetivo" class="control-label"></label>
+                <input asp-for="Objetivo" class="form-control" />
+                <span asp-validation-for="Objetivo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Descripcion" class="control-label"></label>
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Indicador" class="control-label"></label>
+                <input asp-for="Indicador" class="form-control" />
+                <span asp-validation-for="Indicador" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Meta" class="control-label"></label>
+                <input asp-for="Meta" class="form-control" />
+                <span asp-validation-for="Meta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beneficios" class="control-label"></label>
+                <input asp-for="Beneficios" class="form-control" />
+                <span asp-validation-for="Beneficios" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comentario" class="control-label"></label>
+                <input asp-for="Comentario" class="form-control" />
+                <span asp-validation-for="Comentario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Tecnologia" class="control-label"></label>
                 <input asp-for="Tecnologia" class="form-control" />
                 <span asp-validation-for="Tecnologia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RealizadoEl" class="control-label"></label>
+                <input asp-for="RealizadoEl" class="form-control" />
+                <span asp-validation-for="RealizadoEl" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TutorId" class="control-label"></label>

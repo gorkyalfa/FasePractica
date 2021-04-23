@@ -14,7 +14,7 @@
             <input type="hidden" asp-for="ProyectoId"/>
             <div class="form-group">
                 <label for="PersonaId" class="control-label"></label>
-                <select id="PersonaId" class="form-control">
+                <select name="PersonaId" id="PersonaId" class="form-control">
                     @foreach(Estudiante estudiante in (List<Estudiante>)(ViewData["Estudiantes"]))
                     {
                     <option value="@estudiante.PersonaId">@estudiante.DataValueField</option>

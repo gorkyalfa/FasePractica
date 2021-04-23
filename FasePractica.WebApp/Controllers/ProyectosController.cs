@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using FasePractica.WebApp.Models;
 using System.Diagnostics;
+using System.Collections;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -84,7 +85,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProyectoId,SemestreId,EmpresaId,Nombre,Descripcion,Tecnologia,TutorId,ContactoId")] Proyecto proyecto)
+        public async Task<IActionResult> Create([Bind("ProyectoId,SemestreId,EmpresaId,Nombre,SituacionActual,Objetivo,Descripcion,Indicador,Meta,Beneficios,Comentario,Tecnologia,,RealizadoEl,TutorId,ContactoId,AlmacenadoEn")] Proyecto proyecto)
         {
             if (ModelState.IsValid)
             {
@@ -124,7 +125,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProyectoId,SemestreId,EmpresaId,Nombre,Descripcion,Tecnologia,TutorId,ContactoId")] Proyecto proyecto)
+        public async Task<IActionResult> Edit(int id, [Bind("ProyectoId,SemestreId,EmpresaId,Nombre,SituacionActual,Objetivo,Descripcion,Indicador,Meta,Beneficios,Comentario,Tecnologia,RealizadoEl,TutorId,ContactoId,AlmacenadoEn")] Proyecto proyecto)
         {
             if (id != proyecto.ProyectoId)
             {
@@ -201,14 +202,13 @@ namespace FasePractica.WebApp.Controllers
             {
                 estudiantes.Add(nota.Estudiante);
             }
-            //TODO- Anderson - Crear un IComparer por DataVauleTextField
-            estudiantes.Sort();
+            estudiantes.Sort(new EstudianteComparador());
             ViewData["Estudiantes"] = estudiantes;
             return View(proyecto);
         }
+
         public async Task<IActionResult> ReportePorEstudiante(int proyectoId, int personaId)
         {
-            //TODO - Anderson - Filtrar estudiante por PersonaId
             var proyecto = _context.Proyectos
                 .Include(p => p.Notas).ThenInclude(p => p.Estudiante)
                 .Include(p => p.Notas).ThenInclude(p => p.Nivel).ThenInclude(p => p.Carrera)
@@ -222,19 +222,13 @@ namespace FasePractica.WebApp.Controllers
                 return NotFound();
             }
             var proyectoViewModel = new ProyectoViewModel();
-
-            int primerEstudiante = 0;
-            //foreach (var item in proyecto.Notas.ToArray())
-            //{
-            //    Debug.Write(item.Estudiante.Apellidos);
-            //    item.Estudiante.Apellidos = proyectoViewModel.NombreApellidoEstudiante;
-            //}
-            proyectoViewModel.NombreApellidoEstudiante = $"{proyecto.Notas[primerEstudiante].Estudiante.Nombres} {proyecto.Notas[primerEstudiante].Estudiante.Apellidos}";
-            proyectoViewModel.NombreDeCarrera = proyecto.Notas[primerEstudiante].Nivel.Carrera.Nombre;
-            proyectoViewModel.NivelEstudiante = proyecto.Notas[primerEstudiante].Nivel.Nombre;
+            proyectoViewModel.ProyectoId = proyecto.ProyectoId;
+            proyectoViewModel.NombreApellidoEstudiante = $"{proyecto.Notas.Single(n => n.Estudiante.PersonaId == personaId).Estudiante.Nombres} {proyecto.Notas.Single(n => n.Estudiante.PersonaId == personaId).Estudiante.Apellidos}";
+            proyectoViewModel.NombreDeCarrera = proyecto.Notas.Single(n => n.Estudiante.PersonaId == personaId).Nivel.Carrera.Nombre;
+            proyectoViewModel.NivelEstudiante = proyecto.Notas.Single(n => n.Estudiante.PersonaId == personaId).Nivel.Nombre;
             proyectoViewModel.PeriodoLectivoEstudiante = proyecto.Semestre.Nombre;
             proyectoViewModel.NombreEmpresaFormadora = proyecto.Empresa.Nombre;
-            proyectoViewModel.HorasFormacionParactica = proyecto.Notas[primerEstudiante].Nivel.HorasPractica;
+            proyectoViewModel.HorasFormacionParactica = proyecto.Notas.Single(n => n.Estudiante.PersonaId == personaId).Nivel.HorasPractica;
             proyectoViewModel.NombreProyecto = proyecto.Nombre;
             proyectoViewModel.SituacionActual = proyecto.SituacionActual;
             proyectoViewModel.ObjetivoProyecto = proyecto.Objetivo;
@@ -246,7 +240,7 @@ namespace FasePractica.WebApp.Controllers
             proyectoViewModel.FechaProyecto = proyecto.RealizadoEl;
             proyectoViewModel.NombreCoordinadorCarrera = $"{proyecto.TutorAcademico.Nombres} {proyecto.TutorAcademico.Apellidos}";
             proyectoViewModel.NombreTutorEmpresarial = $"{proyecto.TutorEmpresarial.Nombres} {proyecto.TutorEmpresarial.Apellidos}";
-            proyectoViewModel.LogoMinisterio = proyecto.Notas[primerEstudiante].Nivel.Carrera.Logo;
+            proyectoViewModel.LogoMinisterio = proyecto.Notas.Single(n => n.Estudiante.PersonaId == personaId).Nivel.Carrera.Logo;
 
             return View(proyectoViewModel);
         }
@@ -255,5 +249,6 @@ namespace FasePractica.WebApp.Controllers
         {
             return _context.Proyectos.Any(e => e.ProyectoId == id);
         }
+
     }
 }

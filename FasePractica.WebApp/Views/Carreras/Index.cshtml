@@ -9,33 +9,24 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Logo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                <img src="data:image/png;base64,@item.Logo" alt="Logo de @item.Nombre" style="width:200px; height:200px;"/>
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CarreraId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CarreraId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CarreraId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="container">
+    <div class="row row-cols-3">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card" style="width: 18rem; margin-top: 10px;">
+                    <img src="data:image/png;base64,@item.Logo" class="card-img-top" alt="Logo de @item.Nombre" />
+                    <div class="card-body">
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Nombre)</p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Edit" asp-route-id="@item.CarreraId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.CarreraId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.CarreraId">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
