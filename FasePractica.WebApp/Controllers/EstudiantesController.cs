@@ -9,6 +9,7 @@ using FasePractica.Data;
 using FasePractica.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using FasePractica.WebApp.Models;
 
 namespace FasePractica.WebApp.Controllers
 {
@@ -17,7 +18,7 @@ namespace FasePractica.WebApp.Controllers
     {
         private readonly TenantDbContext _context;
         private IConfiguration _configuration;
-        
+
         public EstudiantesController(TenantDbContext context, IConfiguration configuration)
         {
             _context = context;
@@ -28,17 +29,17 @@ namespace FasePractica.WebApp.Controllers
         public async Task<IActionResult> Index(int? pagina)
         {
             var tamanoPagina = _configuration.GetValue<int>("TamanoPagina");
-            if(pagina==null || pagina<=0)
+            if (pagina == null || pagina <= 0)
             {
-                pagina=1;
+                pagina = 1;
             }
-            var skip = ((int)pagina-1)*tamanoPagina;   
+            var skip = ((int)pagina - 1) * tamanoPagina;
             var estudiantes = await _context.Estudiantes.Include(e => e.Carrera).Skip(skip).Take(tamanoPagina).ToListAsync();
             var totalEstudiantes = _context.Estudiantes.Count();
-            int totalPaginas = totalEstudiantes/tamanoPagina;
-            if(totalEstudiantes%tamanoPagina!=0)
+            int totalPaginas = totalEstudiantes / tamanoPagina;
+            if (totalEstudiantes % tamanoPagina != 0)
             {
-                totalPaginas+=1;
+                totalPaginas += 1;
             }
             ViewData["PaginaActual"] = pagina;
             ViewData["TotalPaginas"] = totalPaginas;
@@ -178,7 +179,7 @@ namespace FasePractica.WebApp.Controllers
 
         public IActionResult Consultar()
         {
-            ViewData["Semestres"] = _context.Semestres.OrderByDescending(p=>p.FechaInicio).ToList();
+            ViewData["Semestres"] = _context.Semestres.OrderByDescending(p => p.FechaInicio).ToList();
             var tiposDocumentos = new[]
             {
                 new { TipoDocumento = 0, DataValueField = "Planeacion proyecto empresarial"},
@@ -193,16 +194,57 @@ namespace FasePractica.WebApp.Controllers
 
         public IActionResult ConsultarDetalles(int personaId, int[] semestres, int[] documentos)
         {
-            var estudiante = _context.Estudiantes.Include(p => p.PersonaId == personaId);
-            //var estudiante = await _context.Estudiantes
-            //    .Include(e => e.PersonaId)
-            //    .FirstOrDefaultAsync(e => e.PersonaId == personaId);
-            //if (estudiante == null)
-            //{
-            //    return NotFound();
-            //}
-
-            return View();
+            var estudiante = _context.Estudiantes.Find(personaId);
+            if (estudiante == null)
+            {
+                return NotFound();
+            }
+            //TODO - CONSULTAR LOS DATOS DE LOS SEMESTRES QUE ESTAN INDICADOS EN LA
+            ////VARIARIBLE SEMESTRE Y LOS DOCUMENTOS QUE CORRESPONDAN AL ESTUDIANTE
+            ViewData["Estudiante"] = estudiante.DataValueField;
+            var registros = new List<DocumentoConsulta>();
+            for (int i = 0; i < semestres.Length; i++)
+            {
+                var semestre = _context.Semestres.Find(semestres[i]);
+                for (int j = 0; j < documentos.Length; j++)
+                {
+                    var documento = string.Empty;
+                    var controllerAction = string.Empty;
+                    if(documentos[j] == 0)
+                    {
+                        var url = Url.Action("ReportePorEstudiante", "Proyectos");
+                        documento = "Planeacion proyecto empresarial";
+                        controllerAction = url;
+                    }
+                    else if (documentos[j] == 1)
+                    {
+                        documento = "Plan marco de formacion";
+                        controllerAction = "";
+                    }
+                    else if (documentos[j] == 2)
+                    {
+                        documento = "Plan marco de rotacion";
+                        controllerAction = "debo construir la url del controlador";
+                    }
+                    else if (documentos[j] == 3)
+                    {
+                        documento = "Informe semanal";
+                        controllerAction = "debo construir la url del controlador";
+                    }
+                    else if (documentos[j] == 4)
+                    {
+                        documento = "Reporte nota fase practica";
+                        controllerAction = "debo construir la url del controlador";
+                    }
+                    registros.Add(new DocumentoConsulta
+                    {
+                        Semestre = semestre.DataValueField,
+                        Documento = documento,
+                        Url = $"{controllerAction}?semestreId={semestres[i]}&personaId={personaId}"
+                    });
+                }
+            }
+            return View(registros);
         }
     }
 }

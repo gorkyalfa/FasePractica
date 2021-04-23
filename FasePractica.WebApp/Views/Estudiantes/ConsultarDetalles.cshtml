@@ -1,0 +1,19 @@
+﻿@using FasePractica.Data.Models;
+@model IEnumerable<DocumentoConsulta>
+@{
+    ViewData["Title"] = "ConsultarDetalles";
+}
+
+<h4>Consultar documentos de @ViewData["Estudiante"]</h4>
+
+<div class="container">
+    <table>
+        @foreach (var documentoConsulta in Model)
+        {
+            <tr>
+                <td>@documentoConsulta.Semestre</td>
+                <td><a href="@documentoConsulta.Url" target="_blank">@documentoConsulta.Documento</a></td>
+            </tr>
+        }
+    </table>
+</div>

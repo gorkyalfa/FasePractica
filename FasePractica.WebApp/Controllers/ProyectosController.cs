@@ -207,7 +207,7 @@ namespace FasePractica.WebApp.Controllers
             return View(proyecto);
         }
 
-        public async Task<IActionResult> ReportePorEstudiante(int proyectoId, int personaId)
+        public IActionResult ReportePorEstudiante(int proyectoId, int personaId)
         {
             var proyecto = _context.Proyectos
                 .Include(p => p.Notas).ThenInclude(p => p.Estudiante)
